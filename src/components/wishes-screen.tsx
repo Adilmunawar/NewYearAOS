@@ -74,13 +74,13 @@ export default function WishesScreen({ wishes, onDone }: WishesScreenProps) {
 
         <div className="relative z-10 text-center max-w-3xl flex flex-col items-center animate-fade-in-up">
             <div className="flex gap-4">
-              <PartyPopper className="w-12 h-12 md:w-16 md:h-16 text-primary animate-shake" style={{animationDelay: '0.2s'}} />
-              <PartyPopper className="w-12 h-12 md:w-16 md:h-16 text-primary animate-shake" style={{animationDelay: '0.4s'}} />
-              <PartyPopper className="w-12 h-12 md:w-16 md:h-16 text-primary animate-shake" style={{animationDelay: '0.6s'}} />
+              <PartyPopper className="w-10 h-10 md:w-16 md:h-16 text-primary animate-shake" style={{animationDelay: '0.2s'}} />
+              <PartyPopper className="w-10 h-10 md:w-16 md:h-16 text-primary animate-shake" style={{animationDelay: '0.4s'}} />
+              <PartyPopper className="w-10 h-10 md:w-16 md:h-16 text-primary animate-shake" style={{animationDelay: '0.6s'}} />
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mt-6">Happy New Year 2026!</h1>
-            <p className="mt-4 text-lg md:text-xl text-primary text-glow-gold">"{wishes.quote}"</p>
-            <p className="mt-6 md:mt-8 text-base md:text-lg text-white/80 leading-relaxed">
+            <p className="mt-4 text-base md:text-xl text-primary text-glow-gold">"{wishes.quote}"</p>
+            <p className="mt-6 md:mt-8 text-sm md:text-lg text-white/80 leading-relaxed">
                 {wishes.wish}
             </p>
         </div>
