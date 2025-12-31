@@ -27,10 +27,10 @@ export const roasts = {
 export const newYearWishes = {
   GIS: {
     quote: "May your new year be as well-projected as a UTM grid and your resolutions as precise as a survey point.",
-    wish: "Wishing you a 2025 full of clean data, successful geoprocessing, and maps so beautiful they bring a tear to the eye. Happy New Year!",
+    wish: "Wishing you a 2026 full of clean data, successful geoprocessing, and maps so beautiful they bring a tear to the eye. Happy New Year!",
   },
   PLRA: {
     quote: "Let's resolve to make this year's records as clean as a freshly-issued title. No encroachments on our happiness!",
-    wish: "Here's to a prosperous 2025, with clear boundaries, undisputed claims, and a parcel of joy for everyone. Happy New Year!",
+    wish: "Here's to a prosperous 2026, with clear boundaries, undisputed claims, and a parcel of joy for everyone. Happy New Year!",
   },
 };

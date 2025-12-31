@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { Button } from './ui/button';
-import { Sparkles, ArrowLeft } from 'lucide-react';
+import { PartyPopper } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface WishesScreenProps {
@@ -16,13 +15,23 @@ interface WishesScreenProps {
 const triggerConfetti = () => {
   if (typeof window.confetti !== 'function') return;
 
-  const duration = 5 * 1000;
+  const duration = 8 * 1000;
   const animationEnd = Date.now() + duration;
-  const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+  
+  const colors = ['#FFBF00', '#FFD700', '#FFFFFF', '#facc15'];
 
-  function randomInRange(min: number, max: number) {
-    return Math.random() * (max - min) + min;
-  }
+  const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min;
+
+  const fire = (particleRatio: number, opts: any) => {
+    window.confetti?.({
+      ...opts,
+      particleCount: Math.floor(200 * particleRatio),
+    });
+  };
+
+  // Initial burst
+  fire(1, { spread: 26, startVelocity: 55, origin: { x: 0, y: 1 } });
+  fire(1, { spread: 26, startVelocity: 55, origin: { x: 1, y: 1 } });
 
   const interval: NodeJS.Timeout = setInterval(function() {
     const timeLeft = animationEnd - Date.now();
@@ -31,17 +40,29 @@ const triggerConfetti = () => {
       return clearInterval(interval);
     }
 
-    const particleCount = 50 * (timeLeft / duration);
-    // since particles fall down, start a bit higher than random
-    window.confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
-    window.confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
+    const particleCount = 100 * (timeLeft / duration);
+    
+    // Poppers from corners
+    window.confetti({ particleCount, angle: 60, spread: 55, origin: { x: 0, y: 1 }, colors });
+    window.confetti({ particleCount, angle: 120, spread: 55, origin: { x: 1, y: 1 }, colors });
+
+    // Rain from top
+    if (Date.now() % 2 === 0) { // To make it less intense
+        window.confetti({ particleCount, spread: 360, ticks: 60, zIndex: 0, origin: { x: randomInRange(0.1, 0.9), y: Math.random() - 0.2 }, colors });
+    }
+
   }, 250);
 };
 
 export default function WishesScreen({ wishes, onDone }: WishesScreenProps) {
   useEffect(() => {
     triggerConfetti();
-  }, []);
+    const timer = setTimeout(() => {
+      onDone();
+    }, 8000); // Automatically go back after 8 seconds
+
+    return () => clearTimeout(timer);
+  }, [onDone]);
 
   return (
     <div className="fixed inset-0 w-full h-full flex flex-col items-center justify-center p-4 z-50 bg-background overflow-hidden">
@@ -52,20 +73,16 @@ export default function WishesScreen({ wishes, onDone }: WishesScreenProps) {
         </div>
 
         <div className="relative z-10 text-center max-w-3xl flex flex-col items-center animate-fade-in-up">
-            <Sparkles className="w-16 h-16 text-primary mb-4 animate-pulse" />
-            <h1 className="text-4xl md:text-5xl font-black text-white">Happy New Year!</h1>
+            <div className="flex gap-4">
+              <PartyPopper className="w-16 h-16 text-primary animate-shake" style={{animationDelay: '0.2s'}} />
+              <PartyPopper className="w-16 h-16 text-primary animate-shake" style={{animationDelay: '0.4s'}} />
+              <PartyPopper className="w-16 h-16 text-primary animate-shake" style={{animationDelay: '0.6s'}} />
+            </div>
+            <h1 className="text-4xl md:text-5xl font-black text-white mt-6">Happy New Year 2026!</h1>
             <p className="mt-4 text-xl text-primary text-glow-gold">"{wishes.quote}"</p>
             <p className="mt-8 text-lg text-white/80 leading-relaxed">
                 {wishes.wish}
             </p>
-            <Button
-                onClick={onDone}
-                variant="outline"
-                className="mt-12 border-primary/50 text-primary hover:bg-primary/10 hover:text-primary hover:border-primary backdrop-blur-sm bg-black/20"
-            >
-                <ArrowLeft className="mr-2 h-4 w-4" />
-                Back to Dashboard
-            </Button>
         </div>
     </div>
   );

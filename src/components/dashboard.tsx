@@ -56,9 +56,9 @@ export default function Dashboard({ user }: { user: UserData }) {
     setShowWishes(true);
   };
   
-  const handleWishesDone = () => {
+  const handleWishesDone = useCallback(() => {
     setShowWishes(false);
-  };
+  }, []);
   
   const handleScreenshot = () => {
     setIsScreenshotMode(true);
