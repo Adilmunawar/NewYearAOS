@@ -13,6 +13,7 @@ import Countdown from './countdown';
 import ZipPuzzle from './zip-puzzle';
 import { useToast } from '@/hooks/use-toast';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from './ui/dialog';
+import EndScreen from './end-screen';
 
 const shuffleArray = <T,>(array: T[]): T[] => {
   return [...array].sort(() => Math.random() - 0.5);
@@ -20,13 +21,14 @@ const shuffleArray = <T,>(array: T[]): T[] => {
 
 const GIFT_COST = 10;
 
-export default function Dashboard({ user }: { user: UserData }) {
+export default function Dashboard({ user, onEnd }: { user: UserData; onEnd: () => void }) {
   const [jokesRemaining, setJokesRemaining] = useState<string[]>([]);
   const [jokeHistory, setJokeHistory] = useState<string[]>([]);
   const [currentJoke, setCurrentJoke] = useState<string>('');
   const [isJokeModalOpen, setIsJokeModalOpen] = useState(false);
   const [showWishes, setShowWishes] = useState(false);
   const [showCountdown, setShowCountdown] = useState(false);
+  const [showEndScreen, setShowEndScreen] = useState(false);
   const [credits, setCredits] = useState(0);
   const [isPuzzleModalOpen, setIsPuzzleModalOpen] = useState(false);
   const { toast } = useToast();
@@ -108,9 +110,19 @@ export default function Dashboard({ user }: { user: UserData }) {
 
   const handleWishesDone = useCallback(() => {
     setShowWishes(false);
+    setShowEndScreen(true);
   }, []);
+
+  const handleEndScreenDone = useCallback(() => {
+    setShowEndScreen(false);
+    onEnd();
+  }, [onEnd]);
   
   const roastMessage = roasts[user.department] || "Welcome! You're so special, we don't have a roast for you.";
+
+  if (showEndScreen) {
+    return <EndScreen onDone={handleEndScreenDone} />;
+  }
 
   if (showWishes) {
     return <WishesScreen wishes={departmentWishes} onDone={handleWishesDone} />;
