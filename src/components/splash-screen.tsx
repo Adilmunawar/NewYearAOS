@@ -11,7 +11,7 @@ export default function SplashScreen({ onReady }: SplashScreenProps) {
     <div className="fixed inset-0 flex flex-col items-center justify-center bg-background z-50 animate-fade-out" style={{ animationFillMode: 'forwards', animationDelay: '3.5s' }}>
       <div className="w-64 h-64 md:w-80 md:h-80 animate-fade-in-up relative">
         <Image 
-          src="/server%20trafic.gif" 
+          src="/server trafic.gif" 
           alt="Server traffic animation" 
           layout="fill" 
           objectFit="contain" 
