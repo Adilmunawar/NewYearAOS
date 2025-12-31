@@ -2,6 +2,7 @@
 
 import { PartyPopper, Linkedin, Code, User } from 'lucide-react';
 import { Button } from './ui/button';
+import Image from 'next/image';
 
 const triggerConfettiBlast = (e: React.MouseEvent<HTMLButtonElement>) => {
     try {
@@ -50,7 +51,12 @@ export default function EndScreen({ onRestart }: EndScreenProps) {
             </Button>
 
             <div className="mt-12 animate-fade-in-up" style={{animationDelay: '0.5s'}}>
-              <p className="text-white/70">Visit the developer who gave you a little smile today</p>
+              <div className="relative w-24 h-24 rounded-full overflow-hidden mx-auto mb-4 border-2 border-primary shadow-lg">
+                <Image src="/image.png" alt="Developer" layout="fill" objectFit="cover" />
+              </div>
+              <p className="text-white/70 max-w-md mx-auto">
+                Meet the developer who gave you a tiny biny joy with his 8714 lines of code, one night debug and 66 commits.
+              </p>
               <div className="flex flex-wrap justify-center gap-4 mt-4">
                 <a href="https://www.linkedin.com/in/adilmunawar/" target="_blank" rel="noopener noreferrer">
                   <Button variant="outline" className="border-primary/50 text-white hover:bg-primary/10 hover:text-primary transition-all duration-300 hover:scale-105">
