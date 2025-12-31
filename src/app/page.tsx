@@ -21,7 +21,7 @@ export default function Home() {
 
     const splashTimer = setTimeout(() => {
       setCurrentScreen('landing');
-    }, 4000);
+    }, 6000);
 
     return () => clearTimeout(splashTimer);
   }, [isSplashReady]);
