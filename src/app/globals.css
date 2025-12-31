@@ -76,6 +76,10 @@
       background-position: 0% 50%;
     }
   }
+
+  .transform-style-3d {
+    transform-style: preserve-3d;
+  }
 }
 
 @layer utilities {
