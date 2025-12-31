@@ -13,7 +13,7 @@ interface PuzzleConfig {
 }
 
 export const puzzles: PuzzleConfig[] = [
-    { // Puzzle from the user's image
+    { // The difficult one
         points: [
             { point: 1, pos: [1, 4] }, { point: 2, pos: [1, 1] }, { point: 3, pos: [3, 1] },
             { point: 4, pos: [3, 4] }, { point: 5, pos: [5, 4] }, { point: 6, pos: [5, 1] },
@@ -23,26 +23,6 @@ export const puzzles: PuzzleConfig[] = [
             { from: [2, 2], to: [2, 3] }, { from: [2, 4], to: [2, 5] },
             { from: [4, 1], to: [4, 2] }, { from: [4, 3], to: [4, 4] },
             { from: [4, 5], to: [5, 5] }, { from: [6, 2], to: [5, 2] },
-        ],
-    },
-    { // Puzzle shaped like a '2'
-        points: [
-            { point: 1, pos: [1, 1] }, { point: 2, pos: [1, 4] }, { point: 3, pos: [3, 4] },
-            { point: 4, pos: [3, 1] }, { point: 5, pos: [5, 1] }, { point: 6, pos: [5, 5] },
-        ],
-        walls: [
-            { from: [2, 0], to: [2, 1] }, { from: [2, 2], to: [2, 3] },
-            { from: [4, 2], to: [4, 3] }, { from: [4, 4], to: [4, 5] },
-        ],
-    },
-    { // Puzzle shaped like an 'S'
-        points: [
-            { point: 1, pos: [1, 5] }, { point: 2, pos: [1, 1] }, { point: 3, pos: [3, 1] },
-            { point: 4, pos: [3, 5] }, { point: 5, pos: [5, 5] }, { point: 6, pos: [5, 1] },
-        ],
-        walls: [
-            { from: [2, 2], to: [2, 3] }, { from: [2, 3], to: [2, 4] },
-            { from: [4, 2], to: [4, 3] }, { from: [4, 3], to: [4, 4] },
         ],
     },
 ];
@@ -100,7 +80,9 @@ export default function ZipPuzzle({ puzzleConfig, onSolve }: ZipPuzzleProps) {
     // Check if the points on the path are in sequential order
     for (let i = 0; i < pointsOnPath.length; i++) {
       if (pointsOnPath[i].point !== i + 1) {
-        return i + 1; // The next point to find is the one that's missing
+        setError("Wrong order! Follow the numbers.");
+        setIsDragging(false);
+        return i + 1;
       }
     }
     
@@ -125,9 +107,9 @@ export default function ZipPuzzle({ puzzleConfig, onSolve }: ZipPuzzleProps) {
         .map(pos => sortedPoints.find(p => p.pos[0] === pos[0] && p.pos[1] === pos[1]))
         .filter((p): p is { point: number; pos: [number, number] } => p !== undefined);
       
-      const allPointsFound = pointsOnPath.length === sortedPoints.length;
+      const allPointsFoundInOrder = pointsOnPath.length === sortedPoints.length && pointsOnPath.every((p, i) => p.point === i + 1);
       
-      if (allPointsFound) {
+      if (allPointsFoundInOrder) {
         setSolved(true);
         setTimeout(onSolve, 500);
       }

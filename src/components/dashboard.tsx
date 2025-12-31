@@ -50,7 +50,8 @@ export default function Dashboard({ user, onRestart }: DashboardProps) {
 
   useEffect(() => {
     resetJokes();
-    setSelectedPuzzleIndex(Math.floor(Math.random() * puzzles.length));
+    // Always use the first puzzle
+    setSelectedPuzzleIndex(0);
   }, [resetJokes]);
 
   const handlePuzzleSolve = () => {
@@ -62,8 +63,8 @@ export default function Dashboard({ user, onRestart }: DashboardProps) {
       description: `You've earned ${GIFT_COST} credits!`,
       className: 'bg-green-600/80 border-green-500 text-white',
     });
-    // Select a new puzzle for the next time
-    setSelectedPuzzleIndex(Math.floor(Math.random() * puzzles.length));
+    // Always use the first puzzle for the next time as well
+    setSelectedPuzzleIndex(0);
   };
 
   const getNewJoke = (e: MouseEvent<HTMLDivElement>) => {
