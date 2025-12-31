@@ -36,7 +36,21 @@ export default function Dashboard({ user }: { user: UserData }) {
     resetJokes();
   }, [resetJokes]);
 
-  const getNewJoke = () => {
+  const getNewJoke = (e: MouseEvent<HTMLDivElement>) => {
+    if (window.confetti) {
+      const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+      window.confetti({
+        particleCount: 150,
+        spread: 80,
+        origin: {
+          x: (rect.left + rect.width / 2) / window.innerWidth,
+          y: (rect.top + rect.height / 2) / window.innerHeight,
+        },
+        scalar: 1.2,
+        colors: ['#FFBF00', '#FFD700', '#FFFFFF', '#facc15'],
+      });
+    }
+
     if (jokesRemaining.length === 0) {
       const shuffled = shuffleArray(departmentJokes.filter(j => j !== currentJoke));
       setJokesRemaining(shuffled.slice(1));
@@ -115,10 +129,10 @@ export default function Dashboard({ user }: { user: UserData }) {
 
       <main className="flex-grow flex flex-col items-center justify-center w-full mt-8 md:mt-12">
         <div className={cn("text-center mb-8 transition-opacity duration-500", isScreenshotMode ? 'opacity-0' : 'opacity-100')}>
-            <h2 className="text-2xl md:text-3xl font-bold text-white animate-fade-in-up" style={{ animationDelay: '0.4s' }}>Choose Your Laugh</h2>
-            <p className="text-white/50 animate-fade-in-up text-sm md:text-base" style={{ animationDelay: '0.5s' }}>Click a gift to reveal a (probably terrible) joke.</p>
+            <h2 className="text-2xl md:text-3xl font-bold text-white animate-fade-in-up" style={{ animationDelay: '0.4s' }}>Your Joke Treasury</h2>
+            <p className="text-white/50 animate-fade-in-up text-sm md:text-base" style={{ animationDelay: '0.5s' }}>Click a gift to reveal a treasure of questionable humor.</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-12 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+        <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
           <GiftBox onClick={getNewJoke} />
           <GiftBox onClick={getNewJoke} />
           <GiftBox onClick={getNewJoke} />
