@@ -21,7 +21,12 @@ const shuffleArray = <T,>(array: T[]): T[] => {
 
 const GIFT_COST = 10;
 
-export default function Dashboard({ user }: { user: UserData }) {
+interface DashboardProps {
+  user: UserData;
+  onRestart: () => void;
+}
+
+export default function Dashboard({ user, onRestart }: DashboardProps) {
   const [jokesRemaining, setJokesRemaining] = useState<string[]>([]);
   const [jokeHistory, setJokeHistory] = useState<string[]>([]);
   const [currentJoke, setCurrentJoke] = useState<string>('');
@@ -71,7 +76,7 @@ export default function Dashboard({ user }: { user: UserData }) {
       setIsPuzzleModalOpen(true);
       return false; // Indicate failure
     }
-
+    
     setCredits(prev => prev - GIFT_COST);
     
     try {
@@ -128,7 +133,7 @@ export default function Dashboard({ user }: { user: UserData }) {
   const roastMessage = roasts[user.department] || "Welcome! You're so special, we don't have a roast for you.";
 
   if (showEndScreen) {
-    return <EndScreen />;
+    return <EndScreen onRestart={onRestart} />;
   }
 
   if (showWishes) {
@@ -186,7 +191,7 @@ export default function Dashboard({ user }: { user: UserData }) {
           <DialogHeader>
             <DialogTitle className="text-primary text-glow-gold flex items-center gap-2">
               <PartyPopper />
-              Here's a Joke For You!
+              Here's a Chuckle For You!
             </DialogTitle>
             <DialogDescription className="text-white/70 pt-4 text-base md:text-lg text-center">
               {currentJoke}

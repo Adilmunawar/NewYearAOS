@@ -52,6 +52,12 @@ export default function Home() {
     }, 1200); // Duration of the exit animation
   };
 
+  const handleRestart = () => {
+    setUserData(null);
+    setIsExiting(false);
+    setCurrentScreen('landing');
+  };
+
   const renderScreen = () => {
     switch (currentScreen) {
       case 'splash1':
@@ -61,7 +67,7 @@ export default function Home() {
       case 'landing':
         return <LandingScreen onEnter={handleEnter} isExiting={isExiting} />;
       case 'dashboard':
-        return userData ? <Dashboard user={userData} /> : null;
+        return userData ? <Dashboard user={userData} onRestart={handleRestart} /> : null;
       default:
         return <SplashScreen onReady={handleSplash1Ready} />;
     }
