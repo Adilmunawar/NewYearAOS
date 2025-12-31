@@ -80,6 +80,10 @@
   .transform-style-3d {
     transform-style: preserve-3d;
   }
+
+  .flip-card {
+    animation: flip 0.6s ease-in-out;
+  }
 }
 
 @layer utilities {
@@ -102,5 +106,24 @@
       filter: drop-shadow(0 0 15px hsl(var(--primary) / 0.7)) drop-shadow(0 0 25px hsl(var(--primary) / 0.6)) brightness(1.2);
        transform: translateY(2px);
     }
+  }
+
+  @keyframes flip {
+    0% {
+      transform: rotateX(0deg);
+      opacity: 1;
+    }
+    50% {
+      transform: rotateX(-90deg);
+      opacity: 0.5;
+    }
+    100% {
+      transform: rotateX(0deg);
+      opacity: 1;
+    }
+  }
+
+  .perspective {
+    perspective: 1000px;
   }
 }

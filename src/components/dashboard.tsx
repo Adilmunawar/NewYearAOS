@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import Typewriter from './typewriter';
 import GiftBox from './gift-box';
 import WishesScreen from './wishes-screen';
+import Countdown from './countdown';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from './ui/dialog';
 
 const shuffleArray = <T,>(array: T[]): T[] => {
@@ -21,6 +22,7 @@ export default function Dashboard({ user }: { user: UserData }) {
   const [currentJoke, setCurrentJoke] = useState<string>('');
   const [isJokeModalOpen, setIsJokeModalOpen] = useState(false);
   const [showWishes, setShowWishes] = useState(false);
+  const [showCountdown, setShowCountdown] = useState(false);
   const [isScreenshotMode, setIsScreenshotMode] = useState(false);
   
   const departmentJokes = useMemo(() => jokes[user.department] || [], [user.department]);
@@ -67,9 +69,14 @@ export default function Dashboard({ user }: { user: UserData }) {
   
   const handleContinue = () => {
     setIsJokeModalOpen(false);
-    setShowWishes(true);
+    setShowCountdown(true);
   };
   
+  const handleCountdownComplete = useCallback(() => {
+    setShowCountdown(false);
+    setShowWishes(true);
+  }, []);
+
   const handleWishesDone = useCallback(() => {
     setShowWishes(false);
   }, []);
@@ -108,6 +115,10 @@ export default function Dashboard({ user }: { user: UserData }) {
 
   if (showWishes) {
     return <WishesScreen wishes={departmentWishes} onDone={handleWishesDone} />;
+  }
+
+  if (showCountdown) {
+    return <Countdown startYear={1947} endYear={2026} onComplete={handleCountdownComplete} />;
   }
 
   return (
