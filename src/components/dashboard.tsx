@@ -10,7 +10,7 @@ import Typewriter from './typewriter';
 import GiftBox from './gift-box';
 import WishesScreen from './wishes-screen';
 import Countdown from './countdown';
-import ZipPuzzle from './zip-puzzle';
+import ZipPuzzle, { puzzles } from './zip-puzzle';
 import { useToast } from '@/hooks/use-toast';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from './ui/dialog';
 import EndScreen from './end-screen';
