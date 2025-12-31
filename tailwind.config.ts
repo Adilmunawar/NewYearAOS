@@ -121,8 +121,8 @@ export default {
           '100%': { transform: 'rotate(0deg)' },
         },
         'shimmer': {
-          '0%': { backgroundPosition: '-500% 0' },
-          '100%': { backgroundPosition: '500% 0' },
+          'from': { 'background-position': '200% 0' },
+          'to': { 'background-position': '-200% 0' },
         },
       },
       animation: {
@@ -134,7 +134,7 @@ export default {
         'bob': 'bob 4s ease-in-out infinite',
         'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
         'aggressive-shake': 'aggressive-shake 0.5s ease-in-out infinite',
-        'shimmer': 'shimmer 4s linear infinite',
+        'shimmer': 'shimmer 2s linear infinite',
       },
     },
   },
