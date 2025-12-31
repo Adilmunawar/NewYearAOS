@@ -8,7 +8,6 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { Map, Landmark } from 'lucide-react';
 import Image from 'next/image';
-import InteractiveLogo from './interactive-logo';
 
 interface LandingScreenProps {
   onEnter: (data: UserData) => void;
@@ -108,24 +107,27 @@ export default function LandingScreen({ onEnter, isExiting }: LandingScreenProps
         <div className="grid md:grid-cols-2 gap-4 md:gap-8 items-center">
           
           {/* Left Column: Logo */}
-          <div className="hidden md:flex flex-col justify-center items-center animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-             <InteractiveLogo />
+          <div className="flex flex-col justify-center items-center animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+             <Image 
+                src="/aoslogo.gif"
+                alt="AOS New Year Logo"
+                width={400}
+                height={400}
+                className="w-64 h-64 md:w-96 md:h-96"
+                unoptimized
+                priority
+             />
           </div>
 
           {/* Right Column: Content */}
           <div className="flex flex-col items-center justify-center">
-             {/* Logo for mobile */}
-            <div className="md:hidden flex flex-col justify-center items-center animate-fade-in-up mb-4" style={{ animationDelay: '0.3s' }}>
-               <InteractiveLogo />
-            </div>
-
             <form onSubmit={handleSubmit} className="w-full max-w-md md:max-w-sm animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
               <div className="relative p-4 sm:p-6 bg-black/20 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/5 to-transparent"></div>
                 <div className="relative z-10 flex flex-col items-center gap-4">
                   <Input
                     type="text"
-                    placeholder="Enter your name, hero..."
+                    placeholder="Apna name likhoo zara idhar..."
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="w-full max-w-xs sm:max-w-sm h-12 text-center text-lg bg-black/30 border-white/20 focus:ring-primary focus:border-primary placeholder:text-white/40"
