@@ -18,6 +18,7 @@ const initialPoints = [
   { point: 8, pos: [1, 2] },
   { point: 9, pos: [1, 1] },
   { point: 10, pos: [2, 1] },
+  { point: 11, pos: [2, 4] },
 ];
 
 const walls = [
@@ -189,10 +190,10 @@ export default function ZipPuzzle({ onSolve }: ZipPuzzleProps) {
             {/* Path lines */}
             {isInPath && path.findIndex(p => p[0] === r && p[1] === c) < path.length -1 && (() => {
               const nextPos = path[path.findIndex(p => p[0] === r && p[1] === c) + 1];
-              if (nextPos[0] < r) return <div className="absolute h-1/2 w-1 bottom-1/2 bg-primary pointer-events-none" />;
-              if (nextPos[0] > r) return <div className="absolute h-1/2 w-1 top-1/2 bg-primary pointer-events-none" />;
-              if (nextPos[1] < c) return <div className="absolute w-1/2 h-1 right-1/2 bg-primary pointer-events-none" />;
-              if (nextPos[1] > c) return <div className="absolute w-1/2 h-1 left-1/2 bg-primary pointer-events-none" />;
+              if (nextPos[0] < r) return <div className="absolute h-full w-1 top-0 bg-primary pointer-events-none" />;
+              if (nextPos[0] > r) return <div className="absolute h-full w-1 bottom-0 bg-primary pointer-events-none" />;
+              if (nextPos[1] < c) return <div className="absolute w-full h-1 right-0 bg-primary pointer-events-none" />;
+              if (nextPos[1] > c) return <div className="absolute w-full h-1 left-0 bg-primary pointer-events-none" />;
               return null;
             })()}
              {/* Path line from previous cell to this one */}
