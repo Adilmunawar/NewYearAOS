@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo, useCallback, type MouseEvent } from 'reac
 import type { UserData } from '@/app/page';
 import { jokes, roasts, newYearWishes } from '@/lib/data';
 import { Button } from './ui/button';
-import { Camera, PartyPopper, RefreshCw } from 'lucide-react';
+import { PartyPopper, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Typewriter from './typewriter';
 import GiftBox from './gift-box';
@@ -23,7 +23,6 @@ export default function Dashboard({ user }: { user: UserData }) {
   const [isJokeModalOpen, setIsJokeModalOpen] = useState(false);
   const [showWishes, setShowWishes] = useState(false);
   const [showCountdown, setShowCountdown] = useState(false);
-  const [isScreenshotMode, setIsScreenshotMode] = useState(false);
   
   const departmentJokes = useMemo(() => jokes[user.department] || [], [user.department]);
   const departmentWishes = useMemo(() => newYearWishes[user.department], [user.department]);
@@ -81,36 +80,6 @@ export default function Dashboard({ user }: { user: UserData }) {
     setShowWishes(false);
   }, []);
   
-  const handleScreenshot = () => {
-    setIsScreenshotMode(true);
-    if (window.confetti) {
-      const duration = 3 * 1000;
-      const end = Date.now() + duration;
-
-      (function frame() {
-        window.confetti({
-          particleCount: 2,
-          angle: 60,
-          spread: 55,
-          origin: { x: 0 },
-          colors: ['#FFBF00', '#FFD700', '#FFFFFF']
-        });
-        window.confetti({
-          particleCount: 2,
-          angle: 120,
-          spread: 55,
-          origin: { x: 1 },
-          colors: ['#FFBF00', '#FFD700', '#FFFFFF']
-        });
-
-        if (Date.now() < end) {
-          requestAnimationFrame(frame);
-        }
-      }());
-    }
-    setTimeout(() => setIsScreenshotMode(false), 4000);
-  };
-
   const roastMessage = roasts[user.department] || "Welcome! You're so special, we don't have a roast for you.";
 
   if (showWishes) {
@@ -128,7 +97,7 @@ export default function Dashboard({ user }: { user: UserData }) {
       <div className="absolute top-1/2 left-1/4 w-20 h-20 bg-secondary/20 rounded-full animate-bob" style={{ animationDelay: '-4s', animationDuration: '10s' }}></div>
 
 
-      <header className={cn("w-full max-w-5xl text-center transition-opacity duration-500", isScreenshotMode ? 'opacity-0' : 'opacity-100', 'animate-fade-in-up' )}>
+      <header className={cn("w-full max-w-5xl text-center transition-opacity duration-500", 'animate-fade-in-up' )}>
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-black">
           <span className="text-white/80">Welcome, </span>
           <span className="text-primary text-glow-gold"><Typewriter text={user.name} /></span>
@@ -139,7 +108,7 @@ export default function Dashboard({ user }: { user: UserData }) {
       </header>
 
       <main className="flex-grow flex flex-col items-center justify-center w-full mt-8 md:mt-12">
-        <div className={cn("text-center mb-8 transition-opacity duration-500", isScreenshotMode ? 'opacity-0' : 'opacity-100')}>
+        <div className={cn("text-center mb-8 transition-opacity duration-500")}>
             <h2 className="text-2xl md:text-3xl font-bold text-white animate-fade-in-up" style={{ animationDelay: '0.4s' }}>Your Joke Treasury</h2>
             <p className="text-white/50 animate-fade-in-up text-sm md:text-base" style={{ animationDelay: '0.5s' }}>Click a gift to reveal a treasure of questionable humor.</p>
         </div>
@@ -150,11 +119,7 @@ export default function Dashboard({ user }: { user: UserData }) {
         </div>
       </main>
 
-      <footer className={cn("w-full flex flex-col sm:flex-row justify-center items-center gap-4 mt-8 md:mt-12 transition-opacity duration-500", isScreenshotMode ? 'opacity-0' : 'opacity-100')}>
-        <Button onClick={handleScreenshot} variant="outline" className="border-primary/50 text-primary hover:bg-primary/10 hover:text-primary hover:border-primary backdrop-blur-sm bg-black/20">
-          <Camera className="mr-2 h-4 w-4" />
-          Confetti Screenshot
-        </Button>
+      <footer className={cn("w-full flex flex-col sm:flex-row justify-center items-center gap-4 mt-8 md:mt-12 transition-opacity duration-500")}>
         <Button onClick={resetJokes} variant="ghost" size="icon" aria-label="Reset Jokes">
             <RefreshCw className="h-5 w-5"/>
         </Button>
