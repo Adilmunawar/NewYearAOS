@@ -6,13 +6,13 @@ interface SplashScreenProps {
   onReady: () => void;
 }
 
-export default function SplashScreen({ onReady }: SplashScreenProps) {
+export default function SplashScreen2({ onReady }: SplashScreenProps) {
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center bg-background z-50 animate-fade-out" style={{ animationFillMode: 'forwards', animationDelay: '5.5s' }}>
+    <div className="fixed inset-0 flex flex-col items-center justify-center bg-background z-40 animate-fade-out" style={{ animationFillMode: 'forwards', animationDelay: '5.5s' }}>
       <div className="w-64 h-64 md:w-80 md:h-80 animate-fade-in-up relative">
         <Image 
-          src="/server%20trafic.gif" 
-          alt="Server traffic animation" 
+          src="/what.gif" 
+          alt="Confused person GIF" 
           layout="fill" 
           objectFit="contain" 
           unoptimized 
@@ -21,7 +21,7 @@ export default function SplashScreen({ onReady }: SplashScreenProps) {
         />
       </div>
       <p className="mt-8 text-white/80 text-lg md:text-xl font-semibold animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-        Arry itne ziada log agaey site py
+        Kiya lene aeee hoo idhar?
       </p>
     </div>
   );
