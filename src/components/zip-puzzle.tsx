@@ -15,16 +15,16 @@ interface PuzzleConfig {
 export const puzzles: PuzzleConfig[] = [
     {
         points: [
-            { point: 1, pos: [0, 2] }, { point: 2, pos: [3, 0] }, { point: 3, pos: [5, 4] },
-            { point: 4, pos: [6, 4] }, { point: 5, pos: [5, 5] }, { point: 6, pos: [4, 5] },
-            { point: 7, pos: [4, 6] }, { point: 8, pos: [2, 2] }, { point: 9, pos: [2, 1] },
+            { point: 1, pos: [0, 2] }, { point: 2, pos: [3, 0] }, { point: 3, pos: [5, 3] },
+            { point: 4, pos: [6, 3] }, { point: 5, pos: [5, 4] }, { point: 6, pos: [4, 5] },
+            { point: 7, pos: [4, 6] }, { point: 8, pos: [1, 2] }, { point: 9, pos: [1, 1] },
             { point: 10, pos: [3, 1] }
         ],
         walls: [
-            // Top-right L-shape
-            { from: [1, 3], to: [1, 4] }, { from: [1, 3], to: [2, 3] },
-            // Bottom-left L-shape
-            { from: [5, 1], to: [6, 1] }, { from: [5, 1], to: [5, 2] },
+            { from: [1, 2], to: [1, 3] }, { from: [1, 3], to: [2, 3] }, 
+            { from: [2, 3], to: [2, 4] },
+            { from: [5, 0], to: [5, 1] }, { from: [5, 1], to: [6, 1] }, 
+            { from: [4, 2], to: [5, 2] }
         ],
     },
 ];
