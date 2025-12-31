@@ -18,7 +18,7 @@ export const puzzles: PuzzleConfig[] = [
             { point: 1, pos: [0, 2] }, { point: 2, pos: [3, 0] }, { point: 3, pos: [5, 4] },
             { point: 4, pos: [6, 4] }, { point: 5, pos: [5, 5] }, { point: 6, pos: [4, 5] },
             { point: 7, pos: [4, 6] }, { point: 8, pos: [1, 2] }, { point: 9, pos: [1, 1] },
-            { point: 10, pos: [3, 1] }
+            { point: 10, pos: [2, 1] }, { point: 11, pos: [2, 4] }
         ],
         walls: [
              // Top-right L-shape
@@ -171,7 +171,7 @@ export default function ZipPuzzle({ puzzleConfig, onSolve }: ZipPuzzleProps) {
   };
   
   const resetPuzzle = () => {
-    setPath([initialPoints[0].pos]);
+    setPath(initialPoints[0].pos);
     setSolved(false);
     setError(null);
     setIsDragging(false);
