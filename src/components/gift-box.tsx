@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, type MouseEvent } from 'react';
+import { useState, type MouseEvent } from 'react';
 import { cn } from '@/lib/utils';
 import { Gift } from 'lucide-react';
 
@@ -10,15 +10,16 @@ interface GiftBoxProps {
 
 export default function GiftBox({ onClick }: GiftBoxProps) {
   const [isLidFlipped, setIsLidFlipped] = useState(false);
-  const audioRef = useRef<HTMLAudioElement>(null);
 
   const handleClick = (e: MouseEvent<HTMLDivElement>) => {
     if (isLidFlipped) return;
     setIsLidFlipped(true);
 
-    if (audioRef.current) {
-      audioRef.current.currentTime = 0;
-      audioRef.current.play();
+    try {
+      const audio = new Audio('/opening-sound.mp3');
+      audio.play();
+    } catch (error) {
+      console.error("Error playing sound:", error);
     }
 
     onClick(e);
@@ -34,7 +35,6 @@ export default function GiftBox({ onClick }: GiftBoxProps) {
       className="group relative w-48 h-48 cursor-pointer flex items-end justify-center animate-bob"
       style={{ animationDelay: `${Math.random() * 2}s`, animationDuration: `${8 + Math.random() * 4}s` }}
     >
-      <audio ref={audioRef} src="/opening-sound.mp3" preload="auto"></audio>
       <div className="relative w-36 h-32 group-hover:animate-aggressive-shake">
         {/* Box Base */}
         <div className="absolute bottom-0 w-full h-full bg-gradient-to-br from-secondary to-card border-2 border-primary/50 rounded-md shadow-lg"></div>
