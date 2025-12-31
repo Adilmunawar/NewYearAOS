@@ -1,12 +1,14 @@
+
 export const jokes = {
   GIS: [
-    "Why don't GIS professionals get lost? Because they always have a point of reference!",
-    "How does a cartographer propose? With a map to their heart.",
-    "What do you call a lazy kangaroo? Pouch potato. But a GIS professional would just call it a low-priority spatial object.",
-    "I told a GIS joke to a packed room... but it didn't get a great reception. The projection was off.",
-    "Why did the raster file break up with the vector file? It felt too constrained and needed more space.",
-    "A GIS analyst walks into a bar. The bartender asks, 'What's your coordinate system?' The analyst replies, 'Whatever you're serving, as long as it's projected correctly.'",
-    "What's a GIS developer's favorite song? 'Don't Stop Reticulating... Splines!'",
+    "Why did the GIS analyst get kicked out of the garden? For constantly trying to ground-truth the daisies.",
+    "I asked a GIS professional for their favorite movie. They said, 'The Legend of Bagger Vance,' but they thought it was about vector analysis.",
+    "What's a GIS analyst's favorite pickup line? 'Are you a 90-meter DEM? Because I'm falling for you.'",
+    "A geographer's wife had twins. He was delighted, he now had two points of reference.",
+    "Why are cartographers so good at relationships? They know how to handle projections.",
+    "What do you call a map that's always lying? A pseudo-map.",
+    "Why don't cartographers play hide and seek? Because they always give away their position.",
+    "What is a GIS analyst's favorite band? 'The Eagles', because they do great aerial surveys."
   ],
   PLRA: [
     "Why did the land registrar bring a ladder to work? To reach the high court!",
