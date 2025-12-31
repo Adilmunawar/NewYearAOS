@@ -1,36 +1,53 @@
 'use client';
 
-import { useState, useMemo, type MouseEvent } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
 
 const GRID_SIZE = 7;
 const CELL_SIZE = 48; // A fixed size for the cell in pixels for SVG calculations
 
-const initialPoints = [
-  { point: 1, pos: [0, 2] },
-  { point: 2, pos: [3, 0] },
-  { point: 3, pos: [4, 4] },
-  { point: 4, pos: [5, 3] },
-  { point: 5, pos: [4, 5] },
-  { point: 6, pos: [4, 6] },
-  { point: 7, pos: [3, 6] },
-  { point: 8, pos: [1, 2] },
-  { point: 9, pos: [1, 1] },
-  { point: 10, pos: [2, 1] },
-  { point: 11, pos: [2, 4] },
+interface PuzzleConfig {
+    points: { point: number; pos: [number, number] }[];
+    walls: { from: [number, number], to: [number, number] }[];
+}
+
+export const puzzles: PuzzleConfig[] = [
+    { // Original "Z" like puzzle
+        points: [
+            { point: 1, pos: [0, 2] }, { point: 2, pos: [3, 0] }, { point: 3, pos: [4, 4] },
+            { point: 4, pos: [5, 3] }, { point: 5, pos: [4, 5] }, { point: 6, pos: [4, 6] },
+            { point: 7, pos: [3, 6] }, { point: 8, pos: [1, 2] }, { point: 9, pos: [1, 1] },
+            { point: 10, pos: [2, 1] }, { point: 11, pos: [2, 4] },
+        ],
+        walls: [
+            { from: [1, 3], to: [1, 4] }, { from: [1, 4], to: [2, 4] },
+            { from: [4, 1], to: [4, 2] }, { from: [4, 2], to: [5, 2] },
+        ],
+    },
+    { // Puzzle shaped like a '2'
+        points: [
+            { point: 1, pos: [1, 1] }, { point: 2, pos: [1, 4] }, { point: 3, pos: [3, 4] },
+            { point: 4, pos: [3, 1] }, { point: 5, pos: [5, 1] }, { point: 6, pos: [5, 5] },
+        ],
+        walls: [
+            { from: [2, 0], to: [2, 1] }, { from: [2, 2], to: [2, 3] },
+            { from: [4, 2], to: [4, 3] }, { from: [4, 4], to: [4, 5] },
+        ],
+    },
+    { // Puzzle shaped like an 'S'
+        points: [
+            { point: 1, pos: [1, 5] }, { point: 2, pos: [1, 1] }, { point: 3, pos: [3, 1] },
+            { point: 4, pos: [3, 5] }, { point: 5, pos: [5, 5] }, { point: 6, pos: [5, 1] },
+        ],
+        walls: [
+            { from: [2, 2], to: [2, 3] }, { from: [2, 3], to: [2, 4] },
+            { from: [4, 2], to: [4, 3] }, { from: [4, 3], to: [4, 4] },
+        ],
+    },
 ];
 
-const walls = [
-  // L-shape top right
-  { from: [1, 3], to: [1, 4] },
-  { from: [1, 4], to: [2, 4] },
-  // L-shape bottom left
-  { from: [4, 1], to: [4, 2] },
-  { from: [4, 2], to: [5, 2] },
-];
-
-const checkWall = (from: [number, number], to: [number, number]) => {
+const checkWall = (from: [number, number], to: [number, number], walls: PuzzleConfig['walls']) => {
   return walls.some(wall => 
     (wall.from[0] === from[0] && wall.from[1] === from[1] && wall.to[0] === to[0] && wall.to[1] === to[1]) ||
     (wall.from[0] === to[0] && wall.from[1] === to[1] && wall.to[0] === from[0] && wall.to[1] === from[1])
@@ -40,6 +57,7 @@ const checkWall = (from: [number, number], to: [number, number]) => {
 const generatePathData = (path: [number, number][], cellSize: number) => {
   if (path.length < 2) return '';
   const halfCell = cellSize / 2;
+  
   let d = `M ${path[0][1] * cellSize + halfCell} ${path[0][0] * cellSize + halfCell}`;
   
   for (let i = 1; i < path.length; i++) {
@@ -50,14 +68,25 @@ const generatePathData = (path: [number, number][], cellSize: number) => {
 
 
 interface ZipPuzzleProps {
+    puzzleConfig: PuzzleConfig;
     onSolve: () => void;
 }
 
-export default function ZipPuzzle({ onSolve }: ZipPuzzleProps) {
-  const [path, setPath] = useState<[number, number][]>([initialPoints[0].pos]);
+export default function ZipPuzzle({ puzzleConfig, onSolve }: ZipPuzzleProps) {
+  const [path, setPath] = useState<[number, number][]>([puzzleConfig.points[0].pos]);
   const [solved, setSolved] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+
+  // Reset state if puzzle changes
+  useEffect(() => {
+    setPath([puzzleConfig.points[0].pos]);
+    setSolved(false);
+    setError(null);
+    setIsDragging(false);
+  }, [puzzleConfig]);
+  
+  const { points: initialPoints, walls } = puzzleConfig;
 
   const nextPointToFind = useMemo(() => {
     const pointsOnPath = path
@@ -70,7 +99,7 @@ export default function ZipPuzzle({ onSolve }: ZipPuzzleProps) {
 
     const maxPointFound = pointsOnPath.reduce((max, p) => Math.max(max, p.point), 0);
     return maxPointFound + 1;
-  }, [path]);
+  }, [path, initialPoints]);
 
   const handleDragStart = (row: number, col: number) => {
     if (solved) return;
@@ -107,7 +136,7 @@ export default function ZipPuzzle({ onSolve }: ZipPuzzleProps) {
     }
     
     // Check for walls
-    if (checkWall(lastPos, [row, col])) {
+    if (checkWall(lastPos, [row, col], walls)) {
         setError("You cannot cross a wall.");
         setIsDragging(false);
         return;

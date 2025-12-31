@@ -10,7 +10,7 @@ import Typewriter from './typewriter';
 import GiftBox from './gift-box';
 import WishesScreen from './wishes-screen';
 import Countdown from './countdown';
-import ZipPuzzle from './zip-puzzle';
+import ZipPuzzle, { puzzles } from './zip-puzzle';
 import { useToast } from '@/hooks/use-toast';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from './ui/dialog';
 import EndScreen from './end-screen';
@@ -31,6 +31,7 @@ export default function Dashboard({ user, onEnd }: { user: UserData; onEnd: () =
   const [showEndScreen, setShowEndScreen] = useState(false);
   const [credits, setCredits] = useState(0);
   const [isPuzzleModalOpen, setIsPuzzleModalOpen] = useState(false);
+  const [selectedPuzzleIndex, setSelectedPuzzleIndex] = useState(0);
   const { toast } = useToast();
   
   const departmentJokes = useMemo(() => jokes[user.department] || [], [user.department]);
@@ -44,6 +45,7 @@ export default function Dashboard({ user, onEnd }: { user: UserData; onEnd: () =
 
   useEffect(() => {
     resetJokes();
+    setSelectedPuzzleIndex(Math.floor(Math.random() * puzzles.length));
   }, [resetJokes]);
 
   const handlePuzzleSolve = () => {
@@ -55,6 +57,8 @@ export default function Dashboard({ user, onEnd }: { user: UserData; onEnd: () =
       description: `You've earned ${GIFT_COST} credits!`,
       className: 'bg-green-600/80 border-green-500 text-white',
     });
+    // Select a new puzzle for the next time
+    setSelectedPuzzleIndex(Math.floor(Math.random() * puzzles.length));
   };
 
   const getNewJoke = (e: MouseEvent<HTMLDivElement>) => {
@@ -206,11 +210,11 @@ export default function Dashboard({ user, onEnd }: { user: UserData; onEnd: () =
           <DialogHeader className="p-6 pb-0">
             <DialogTitle className="text-primary text-glow-gold">Complete the Path</DialogTitle>
             <DialogDescription className="text-white/70">
-              Click the numbered dots in sequence to draw a path and earn credits!
+              Click and drag from the blinking dot to connect the numbers in sequence and earn credits!
             </DialogDescription>
           </DialogHeader>
           <div className="p-6">
-            <ZipPuzzle onSolve={handlePuzzleSolve} />
+            <ZipPuzzle puzzleConfig={puzzles[selectedPuzzleIndex]} onSolve={handlePuzzleSolve} key={selectedPuzzleIndex} />
           </div>
         </DialogContent>
       </Dialog>
