@@ -105,10 +105,6 @@ export default function LandingScreen({ onEnter, isExiting }: LandingScreenProps
 
       <div className={cn("z-10 w-full max-w-5xl mx-auto px-4 transition-all duration-500 ease-in-out flex justify-center", isExiting ? 'opacity-0 scale-90' : 'opacity-100 scale-100 delay-300')}>
         <form onSubmit={handleSubmit} className="w-full max-w-sm flex flex-col items-center gap-6 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-          
-          <div className="animate-logo-glow">
-            <Image src="/aoslogo.png" alt="AOS Logo" width={200} height={100} className="mb-4" unoptimized />
-          </div>
 
           <Input
             type="text"
