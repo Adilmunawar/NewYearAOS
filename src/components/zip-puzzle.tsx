@@ -1,12 +1,15 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, type TouchEvent } from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
 
 const GRID_SIZE = 7;
 // Use a smaller cell size for mobile, and larger for desktop
-const getCellSize = () => window.innerWidth < 640 ? 36 : 48;
+const getCellSize = () => {
+    if (typeof window === 'undefined') return 48;
+    return window.innerWidth < 640 ? 36 : 48;
+};
 
 
 interface PuzzleConfig {
@@ -168,6 +171,20 @@ export default function ZipPuzzle({ puzzleConfig, onSolve }: ZipPuzzleProps) {
     const newPath = [...path, [row, col] as [number, number]];
     setPath(newPath);
   };
+
+   const handleTouchMove = (e: TouchEvent<HTMLDivElement>) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const touch = e.touches[0];
+    const element = document.elementFromPoint(touch.clientX, touch.clientY);
+    
+    if (element && 'dataset' in element) {
+      const { row, col } = (element as HTMLElement).dataset;
+      if (row && col) {
+        handleInteraction(parseInt(row, 10), parseInt(col, 10));
+      }
+    }
+  };
   
   const resetPuzzle = () => {
     setPath([sortedPoints[0].pos]);
@@ -193,6 +210,7 @@ export default function ZipPuzzle({ puzzleConfig, onSolve }: ZipPuzzleProps) {
         onMouseUp={handleDragEnd}
         onMouseLeave={handleDragEnd}
         onTouchEnd={handleDragEnd}
+        onTouchMove={handleTouchMove}
         style={{ gridTemplateColumns: `repeat(${GRID_SIZE}, minmax(0, 1fr))` }}
       >
         <svg
@@ -213,6 +231,8 @@ export default function ZipPuzzle({ puzzleConfig, onSolve }: ZipPuzzleProps) {
         {grid.flat().map(({ r, c, point, isInPath, isLastInPath }) => (
           <div
             key={`${r}-${c}`}
+            data-row={r}
+            data-col={c}
             className={cn(
               'relative aspect-square flex items-center justify-center rounded-sm transition-colors duration-200',
               'bg-neutral-800/50',
@@ -223,21 +243,7 @@ export default function ZipPuzzle({ puzzleConfig, onSolve }: ZipPuzzleProps) {
             )}
             onMouseDown={() => handleDragStart(r, c)}
             onMouseEnter={() => handleInteraction(r, c)}
-            onTouchStart={(e) => {
-              const touch = e.touches[0];
-              handleDragStart(r, c);
-            }}
-            onTouchMove={(e) => {
-              const touch = e.touches[0];
-              const element = document.elementFromPoint(touch.clientX, touch.clientY);
-              if (element) {
-                const rect = element.getBoundingClientRect();
-                const gridX = Math.floor((touch.clientX - rect.left) / cellSize);
-                const gridY = Math.floor((touch.clientY - rect.top) / cellSize);
-                // The above calculation is tricky. A simpler way is to check the element's data attributes if we add them.
-                // For now, this is a placeholder for a more robust touch solution.
-              }
-            }}
+            onTouchStart={() => handleDragStart(r, c)}
             style={{ height: `${cellSize}px`, width: `${cellSize}px` }}
           >
             {point && (
