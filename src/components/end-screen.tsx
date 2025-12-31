@@ -2,19 +2,7 @@
 
 import { useEffect } from 'react';
 
-interface EndScreenProps {
-  onDone: () => void;
-}
-
-export default function EndScreen({ onDone }: EndScreenProps) {
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      onDone();
-    }, 6000); // Wait 6 seconds before calling onDone
-
-    return () => clearTimeout(timer);
-  }, [onDone]);
-
+export default function EndScreen() {
   return (
     <div className="fixed inset-0 w-full h-full flex flex-col items-center justify-center p-4 z-50 bg-background overflow-hidden animate-fade-in">
         <div className="relative z-10 text-center max-w-3xl flex flex-col items-center animate-fade-in-up">

@@ -21,7 +21,7 @@ const shuffleArray = <T,>(array: T[]): T[] => {
 
 const GIFT_COST = 10;
 
-export default function Dashboard({ user, onEnd }: { user: UserData; onEnd: () => void }) {
+export default function Dashboard({ user }: { user: UserData }) {
   const [jokesRemaining, setJokesRemaining] = useState<string[]>([]);
   const [jokeHistory, setJokeHistory] = useState<string[]>([]);
   const [currentJoke, setCurrentJoke] = useState<string>('');
@@ -124,16 +124,11 @@ export default function Dashboard({ user, onEnd }: { user: UserData; onEnd: () =
     setShowWishes(false);
     setShowEndScreen(true);
   }, []);
-
-  const handleEndScreenDone = useCallback(() => {
-    setShowEndScreen(false);
-    onEnd();
-  }, [onEnd]);
   
   const roastMessage = roasts[user.department] || "Welcome! You're so special, we don't have a roast for you.";
 
   if (showEndScreen) {
-    return <EndScreen onDone={handleEndScreenDone} />;
+    return <EndScreen />;
   }
 
   if (showWishes) {
