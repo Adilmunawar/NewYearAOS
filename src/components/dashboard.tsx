@@ -37,7 +37,7 @@ export default function Dashboard({ user }: { user: UserData }) {
   }, [resetJokes]);
 
   const getNewJoke = (e: MouseEvent<HTMLDivElement>) => {
-    if (window.confetti) {
+    if (window.confetti && e.currentTarget) {
       const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
       window.confetti({
         particleCount: 150,

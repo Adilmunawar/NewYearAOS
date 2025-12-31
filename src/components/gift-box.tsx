@@ -1,29 +1,22 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, type MouseEvent } from 'react';
 import { cn } from '@/lib/utils';
 import { Gift } from 'lucide-react';
 
 interface GiftBoxProps {
-  onClick: () => void;
+  onClick: (e: MouseEvent<HTMLDivElement>) => void;
 }
 
 export default function GiftBox({ onClick }: GiftBoxProps) {
   const [isLidFlipped, setIsLidFlipped] = useState(false);
 
-  const handleClick = () => {
+  const handleClick = (e: MouseEvent<HTMLDivElement>) => {
     if (isLidFlipped) return;
     setIsLidFlipped(true);
 
-    if (typeof window.confetti === 'function') {
-        window.confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 }
-        });
-    }
+    onClick(e);
 
-    onClick();
     setTimeout(() => {
       setIsLidFlipped(false);
     }, 1200);
@@ -44,7 +37,7 @@ export default function GiftBox({ onClick }: GiftBoxProps) {
         {/* Lid */}
         <div
           className={cn(
-            'absolute -top-4 left-1/2 -translate-x-1/2 w-[152px] h-8 bg-gradient-to-b from-primary to-golden-amber rounded-t-md transition-transform duration-500 ease-out origin-bottom-right z-10',
+            'absolute -top-4 left-1/2 -translate-x-1/2 w-[152px] h-8 bg-gradient-to-b from-primary to-yellow-500 rounded-t-md transition-transform duration-500 ease-out origin-bottom-right z-10',
             isLidFlipped && '-rotate-[120deg] translate-x-12 -translate-y-8'
           )}
         >
