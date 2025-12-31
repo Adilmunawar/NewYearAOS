@@ -146,7 +146,7 @@ export default function LandingScreen({ onEnter, isExiting }: LandingScreenProps
             size="lg"
             className="h-14 px-12 text-lg font-bold bg-primary text-primary-foreground rounded-full transition-all duration-300 hover:bg-primary/90 hover:scale-105 hover:tracking-wider hover:shadow-[0_0_20px_hsl(var(--primary))] active:scale-100"
           >
-            Enter the Party
+            Join Us
           </Button>
 
         </form>
