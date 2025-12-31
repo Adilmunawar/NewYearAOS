@@ -112,28 +112,26 @@ export default {
           '100%': { backgroundPosition: '500% 0' },
         },
         'lid-flip': {
-          '0%': { transform: 'rotate(0deg) translateX(0) translateY(0)', opacity: '1' },
-          '50%': { transform: 'rotate(-120deg) translateX(50px) translateY(-30px)', opacity: '1' },
-          '100%': { transform: 'rotate(-140deg) translateX(60px) translateY(-80px) scale(0.8)', opacity: '0' },
+            '0%': { transform: 'translateZ(0) rotateX(0)', opacity: '1' },
+            '40%': { transform: 'translateZ(30px) rotateX(45deg)', opacity: '1' },
+            '100%': { transform: 'translateZ(-200px) translateY(40px) rotateX(100deg)', opacity: '0' },
         },
         'bow-fly': {
-          '0%': { transform: 'rotate(0deg) scale(1)', opacity: '1' },
-          '100%': { transform: 'rotate(360deg) scale(0) translateY(-100px)', opacity: '0' },
+            '0%': { transform: 'translateZ(0) rotate(0deg) scale(1)', opacity: '1' },
+            '100%': { transform: 'translateZ(150px) translateY(-50px) rotate(360deg) scale(0)', opacity: '0' },
         },
-        'sparkle-1': {
-          '0%': { transform: 'translateY(0) scale(0)', opacity: '0'},
-          '50%': { transform: 'translateY(-40px) scale(1.2)', opacity: '1'},
-          '100%': { transform: 'translateY(-60px) scale(0)', opacity: '0'},
-        },
-        'sparkle-2': {
-          '0%': { transform: 'translateY(0) rotate(0deg) scale(0)', opacity: '0'},
-          '50%': { transform: 'translateY(-50px) rotate(180deg) scale(1)', opacity: '1'},
-          '100%': { transform: 'translateY(-70px) rotate(360deg) scale(0)', opacity: '0'},
-        },
-        'sparkle-3': {
-          '0%': { transform: 'translateY(0) rotate(0deg) scale(0)', opacity: '0'},
-          '50%': { transform: 'translateY(-30px) rotate(-180deg) scale(1.1)', opacity: '0.8'},
-          '100%': { transform: 'translateY(-50px) rotate(-360deg) scale(0)', opacity: '0'},
+        'sparkle': {
+            '0%': {
+                transform: 'rotate(var(--angle)) translateY(0) scale(0.5)',
+                opacity: '1'
+            },
+            '80%': {
+                opacity: '1'
+            },
+            '100%': {
+                transform: 'rotate(var(--angle)) translateY(var(--distance)) scale(0)',
+                opacity: '0'
+            }
         },
       },
       animation: {
@@ -146,9 +144,7 @@ export default {
         'shimmer': 'shimmer 4s linear infinite',
         'lid-flip': 'lid-flip 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards',
         'bow-fly': 'bow-fly 0.8s ease-in forwards',
-        'sparkle-1': 'sparkle-1 0.7s ease-out forwards',
-        'sparkle-2': 'sparkle-2 0.8s ease-out 0.1s forwards',
-        'sparkle-3': 'sparkle-3 0.9s ease-out 0.2s forwards',
+        'sparkle': 'sparkle 1s ease-out forwards',
       },
     },
   },

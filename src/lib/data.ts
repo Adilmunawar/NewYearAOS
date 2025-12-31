@@ -23,3 +23,14 @@ export const roasts = {
   GIS: "Welcome, master of maps and wizard of waypoints! We've allocated a special server just to process your colossal intellect. Please try not to crash it before the New Year's countdown.",
   PLRA: "Ah, a champion of charters and a protector of plots! We trust you've already filed the appropriate paperwork for your spot on the dance floor. Your claim has been duly noted... and will be processed in 3-5 business years.",
 };
+
+export const newYearWishes = {
+  GIS: {
+    quote: "May your new year be as well-projected as a UTM grid and your resolutions as precise as a survey point.",
+    wish: "Wishing you a 2025 full of clean data, successful geoprocessing, and maps so beautiful they bring a tear to the eye. Happy New Year!",
+  },
+  PLRA: {
+    quote: "Let's resolve to make this year's records as clean as a freshly-issued title. No encroachments on our happiness!",
+    wish: "Here's to a prosperous 2025, with clear boundaries, undisputed claims, and a parcel of joy for everyone. Happy New Year!",
+  },
+};

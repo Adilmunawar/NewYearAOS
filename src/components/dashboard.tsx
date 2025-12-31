@@ -2,13 +2,14 @@
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import type { UserData } from '@/app/page';
-import { jokes, roasts } from '@/lib/data';
+import { jokes, roasts, newYearWishes } from '@/lib/data';
 import { Button } from './ui/button';
 import { Camera, PartyPopper, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Typewriter from './typewriter';
 import GiftBox from './gift-box';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
+import WishesScreen from './wishes-screen';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from './ui/dialog';
 
 const shuffleArray = <T,>(array: T[]): T[] => {
   return [...array].sort(() => Math.random() - 0.5);
@@ -19,9 +20,11 @@ export default function Dashboard({ user }: { user: UserData }) {
   const [jokeHistory, setJokeHistory] = useState<string[]>([]);
   const [currentJoke, setCurrentJoke] = useState<string>('');
   const [isJokeModalOpen, setIsJokeModalOpen] = useState(false);
+  const [showWishes, setShowWishes] = useState(false);
   const [isScreenshotMode, setIsScreenshotMode] = useState(false);
   
   const departmentJokes = useMemo(() => jokes[user.department] || [], [user.department]);
+  const departmentWishes = useMemo(() => newYearWishes[user.department], [user.department]);
 
   const resetJokes = useCallback(() => {
     const shuffled = shuffleArray(departmentJokes);
@@ -35,7 +38,6 @@ export default function Dashboard({ user }: { user: UserData }) {
 
   const getNewJoke = () => {
     if (jokesRemaining.length === 0) {
-      // All jokes shown, reshuffle
       const shuffled = shuffleArray(departmentJokes.filter(j => j !== currentJoke));
       setJokesRemaining(shuffled.slice(1));
       setJokeHistory([shuffled[0]]);
@@ -47,6 +49,15 @@ export default function Dashboard({ user }: { user: UserData }) {
       setJokeHistory(prev => [...prev, nextJoke]);
     }
     setIsJokeModalOpen(true);
+  };
+  
+  const handleContinue = () => {
+    setIsJokeModalOpen(false);
+    setShowWishes(true);
+  };
+  
+  const handleWishesDone = () => {
+    setShowWishes(false);
   };
   
   const handleScreenshot = () => {
@@ -81,9 +92,12 @@ export default function Dashboard({ user }: { user: UserData }) {
 
   const roastMessage = roasts[user.department] || "Welcome! You're so special, we don't have a roast for you.";
 
+  if (showWishes) {
+    return <WishesScreen wishes={departmentWishes} onDone={handleWishesDone} />;
+  }
+
   return (
     <div className="min-h-screen w-full flex flex-col items-center p-4 md:p-8 relative overflow-hidden">
-      {/* Parallax Background Elements */}
       <div className="absolute -top-20 -left-20 w-40 h-40 bg-primary/10 rounded-full animate-bob" style={{ animationDelay: '0s', animationDuration: '8s' }}></div>
       <div className="absolute -bottom-20 -right-10 w-60 h-60 bg-primary/10 rounded-full animate-bob" style={{ animationDelay: '-2s', animationDuration: '12s' }}></div>
       <div className="absolute top-1/2 left-1/4 w-20 h-20 bg-secondary/20 rounded-full animate-bob" style={{ animationDelay: '-4s', animationDuration: '10s' }}></div>
@@ -132,6 +146,11 @@ export default function Dashboard({ user }: { user: UserData }) {
               {currentJoke}
             </DialogDescription>
           </DialogHeader>
+          <DialogFooter className="mt-4">
+            <Button onClick={handleContinue} className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
+              Continue
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
