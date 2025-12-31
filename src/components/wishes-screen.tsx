@@ -40,18 +40,18 @@ const triggerConfetti = () => {
       return clearInterval(interval);
     }
 
-    const particleCount = 100 * (timeLeft / duration);
+    const particleCount = 50 * (timeLeft / duration); // Reduced particle count for performance
     
     // Poppers from corners
     window.confetti({ particleCount, angle: 60, spread: 55, origin: { x: 0, y: 1 }, colors });
     window.confetti({ particleCount, angle: 120, spread: 55, origin: { x: 1, y: 1 }, colors });
 
     // Rain from top
-    if (Date.now() % 2 === 0) { // To make it less intense
-        window.confetti({ particleCount, spread: 360, ticks: 60, zIndex: 0, origin: { x: randomInRange(0.1, 0.9), y: Math.random() - 0.2 }, colors });
+    if (Date.now() % 3 === 0) { // To make it less intense
+        window.confetti({ particleCount: particleCount / 2, spread: 360, ticks: 60, zIndex: 0, origin: { x: randomInRange(0.1, 0.9), y: Math.random() - 0.2 }, colors });
     }
 
-  }, 250);
+  }, 350); // Increased interval
 };
 
 export default function WishesScreen({ wishes, onDone }: WishesScreenProps) {
@@ -74,13 +74,13 @@ export default function WishesScreen({ wishes, onDone }: WishesScreenProps) {
 
         <div className="relative z-10 text-center max-w-3xl flex flex-col items-center animate-fade-in-up">
             <div className="flex gap-4">
-              <PartyPopper className="w-16 h-16 text-primary animate-shake" style={{animationDelay: '0.2s'}} />
-              <PartyPopper className="w-16 h-16 text-primary animate-shake" style={{animationDelay: '0.4s'}} />
-              <PartyPopper className="w-16 h-16 text-primary animate-shake" style={{animationDelay: '0.6s'}} />
+              <PartyPopper className="w-12 h-12 md:w-16 md:h-16 text-primary animate-shake" style={{animationDelay: '0.2s'}} />
+              <PartyPopper className="w-12 h-12 md:w-16 md:h-16 text-primary animate-shake" style={{animationDelay: '0.4s'}} />
+              <PartyPopper className="w-12 h-12 md:w-16 md:h-16 text-primary animate-shake" style={{animationDelay: '0.6s'}} />
             </div>
-            <h1 className="text-4xl md:text-5xl font-black text-white mt-6">Happy New Year 2026!</h1>
-            <p className="mt-4 text-xl text-primary text-glow-gold">"{wishes.quote}"</p>
-            <p className="mt-8 text-lg text-white/80 leading-relaxed">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mt-6">Happy New Year 2026!</h1>
+            <p className="mt-4 text-lg md:text-xl text-primary text-glow-gold">"{wishes.quote}"</p>
+            <p className="mt-6 md:mt-8 text-base md:text-lg text-white/80 leading-relaxed">
                 {wishes.wish}
             </p>
         </div>

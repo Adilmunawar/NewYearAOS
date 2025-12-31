@@ -104,19 +104,19 @@ export default function Dashboard({ user }: { user: UserData }) {
 
 
       <header className={cn("w-full max-w-5xl text-center transition-opacity duration-500", isScreenshotMode ? 'opacity-0' : 'opacity-100', 'animate-fade-in-up' )}>
-        <h1 className="text-4xl md:text-5xl font-black">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-black">
           <span className="text-white/80">Welcome, </span>
           <span className="text-primary text-glow-gold"><Typewriter text={user.name} /></span>
         </h1>
-        <p className="mt-4 text-white/60 text-lg max-w-3xl mx-auto animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+        <p className="mt-4 text-white/60 text-base md:text-lg max-w-3xl mx-auto animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
           {roastMessage}
         </p>
       </header>
 
-      <main className="flex-grow flex flex-col items-center justify-center w-full mt-12 md:mt-16">
+      <main className="flex-grow flex flex-col items-center justify-center w-full mt-8 md:mt-12">
         <div className={cn("text-center mb-8 transition-opacity duration-500", isScreenshotMode ? 'opacity-0' : 'opacity-100')}>
-            <h2 className="text-3xl font-bold text-white animate-fade-in-up" style={{ animationDelay: '0.4s' }}>Choose Your Laugh</h2>
-            <p className="text-white/50 animate-fade-in-up" style={{ animationDelay: '0.5s' }}>Click a gift to reveal a (probably terrible) joke.</p>
+            <h2 className="text-2xl md:text-3xl font-bold text-white animate-fade-in-up" style={{ animationDelay: '0.4s' }}>Choose Your Laugh</h2>
+            <p className="text-white/50 animate-fade-in-up text-sm md:text-base" style={{ animationDelay: '0.5s' }}>Click a gift to reveal a (probably terrible) joke.</p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-12 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
           <GiftBox onClick={getNewJoke} />
@@ -125,7 +125,7 @@ export default function Dashboard({ user }: { user: UserData }) {
         </div>
       </main>
 
-      <footer className={cn("w-full flex justify-center items-center gap-4 mt-12 transition-opacity duration-500", isScreenshotMode ? 'opacity-0' : 'opacity-100')}>
+      <footer className={cn("w-full flex flex-col sm:flex-row justify-center items-center gap-4 mt-8 md:mt-12 transition-opacity duration-500", isScreenshotMode ? 'opacity-0' : 'opacity-100')}>
         <Button onClick={handleScreenshot} variant="outline" className="border-primary/50 text-primary hover:bg-primary/10 hover:text-primary hover:border-primary backdrop-blur-sm bg-black/20">
           <Camera className="mr-2 h-4 w-4" />
           Confetti Screenshot
@@ -136,13 +136,13 @@ export default function Dashboard({ user }: { user: UserData }) {
       </footer>
       
       <Dialog open={isJokeModalOpen} onOpenChange={setIsJokeModalOpen}>
-        <DialogContent className="sm:max-w-md bg-black/30 backdrop-blur-xl border-primary/50 text-white">
+        <DialogContent className="sm:max-w-md bg-black/30 backdrop-blur-xl border-primary/50 text-white mx-4">
           <DialogHeader>
             <DialogTitle className="text-primary text-glow-gold flex items-center gap-2">
               <PartyPopper />
               Your Daily Dose of Dad Joke
             </DialogTitle>
-            <DialogDescription className="text-white/70 pt-4 text-lg text-center">
+            <DialogDescription className="text-white/70 pt-4 text-base md:text-lg text-center">
               {currentJoke}
             </DialogDescription>
           </DialogHeader>

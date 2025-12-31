@@ -35,6 +35,7 @@ const DepartmentCard = ({
   const cardRef = useRef<HTMLDivElement>(null);
 
   const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+    if (window.innerWidth < 768) return; // Disable on mobile
     const card = cardRef.current;
     if (!card) return;
 
@@ -42,8 +43,8 @@ const DepartmentCard = ({
     const x = e.clientX - left - width / 2;
     const y = e.clientY - top - height / 2;
 
-    const rotateX = (-y / height) * 20;
-    const rotateY = (x / width) * 20;
+    const rotateX = (-y / height) * 15;
+    const rotateY = (x / width) * 15;
 
     card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
   };
@@ -61,14 +62,14 @@ const DepartmentCard = ({
       onMouseLeave={handleMouseLeave}
       onClick={onSelect}
       className={cn(
-        'relative w-full md:w-64 h-80 rounded-2xl p-6 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 transform-style-3d bg-black/20 backdrop-blur-md border',
+        'relative w-full md:w-64 h-72 md:h-80 rounded-2xl p-6 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 transform-style-3d bg-black/20 backdrop-blur-md border',
         selected ? 'border-primary ring-2 ring-primary' : 'border-white/10',
         `hover:${shadowClass} hover:border-primary`
       )}
     >
       <div className="transform-style-3d transform translate-z-20 text-center">
-        <Icon className={cn('mx-auto h-16 w-16 mb-4 transition-colors duration-300', selected ? 'text-primary' : 'text-white/80', `group-hover:${glowClass}`)} />
-        <h3 className={cn('text-2xl font-bold transition-colors duration-300', selected ? 'text-primary text-glow-gold' : 'text-white')}>{title}</h3>
+        <Icon className={cn('mx-auto h-12 w-12 md:h-16 md:w-16 mb-4 transition-colors duration-300', selected ? 'text-primary' : 'text-white/80', `group-hover:${glowClass}`)} />
+        <h3 className={cn('text-xl md:text-2xl font-bold transition-colors duration-300', selected ? 'text-primary text-glow-gold' : 'text-white')}>{title}</h3>
         <p className="text-white/60 mt-2 text-sm">{description}</p>
       </div>
       <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-2xl opacity-50"></div>
@@ -96,31 +97,31 @@ export default function LandingScreen({ onEnter, isExiting }: LandingScreenProps
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center">
+    <div className="fixed inset-0 flex items-center justify-center p-2">
       {/* Background Split Panels */}
       <div className={cn("absolute top-0 left-0 w-full h-1/2 bg-background transition-transform duration-1000 ease-in-out", isExiting ? '-translate-y-full' : 'translate-y-0')}></div>
       <div className={cn("absolute bottom-0 left-0 w-full h-1/2 bg-background transition-transform duration-1000 ease-in-out", isExiting ? 'translate-y-full' : 'translate-y-0')}></div>
 
-      <div className={cn("z-10 flex flex-col items-center justify-center p-4 transition-all duration-500 ease-in-out", isExiting ? 'opacity-0 scale-90' : 'opacity-100 scale-100 delay-300')}>
-        <div className="text-center mb-10 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-          <h1 className="text-5xl md:text-7xl font-black text-white">AOS New Year</h1>
-          <h2 className="text-5xl md:text-7xl font-black text-primary text-glow-gold">Laughs</h2>
-          <p className="mt-4 text-white/70 text-lg">Work hard, laugh harder. Let's start the year with a smile.</p>
+      <div className={cn("z-10 flex flex-col items-center justify-center w-full transition-all duration-500 ease-in-out", isExiting ? 'opacity-0 scale-90' : 'opacity-100 scale-100 delay-300')}>
+        <div className="text-center mb-8 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-white">AOS New Year</h1>
+          <h2 className="text-4xl sm:text-5xl md:text-7xl font-black text-primary text-glow-gold">Laughs</h2>
+          <p className="mt-4 text-white/70 text-base md:text-lg">Work hard, laugh harder. Let's start the year with a smile.</p>
         </div>
 
         <form onSubmit={handleSubmit} className="w-full max-w-4xl animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-          <div className="relative p-8 bg-black/20 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
+          <div className="relative p-4 sm:p-8 bg-black/20 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/5 to-transparent"></div>
-            <div className="relative z-10 flex flex-col items-center gap-8">
+            <div className="relative z-10 flex flex-col items-center gap-6">
               <Input
                 type="text"
                 placeholder="Enter your name, hero..."
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full max-w-sm h-14 text-center text-lg bg-black/30 border-white/20 focus:ring-primary focus:border-primary placeholder:text-white/40"
+                className="w-full max-w-sm h-12 md:h-14 text-center text-lg bg-black/30 border-white/20 focus:ring-primary focus:border-primary placeholder:text-white/40"
               />
 
-              <div className="flex flex-col md:flex-row gap-8">
+              <div className="flex flex-col md:flex-row gap-4 md:gap-8">
                 <DepartmentCard
                   department="GIS"
                   icon={Map}
@@ -146,7 +147,7 @@ export default function LandingScreen({ onEnter, isExiting }: LandingScreenProps
               <Button
                 type="submit"
                 size="lg"
-                className="h-14 px-12 text-lg font-bold bg-primary text-primary-foreground rounded-full transition-all duration-300 hover:bg-primary/90 hover:scale-105 hover:tracking-wider hover:shadow-[0_0_20px_hsl(var(--primary))] active:scale-100"
+                className="h-12 px-10 md:h-14 md:px-12 text-base md:text-lg font-bold bg-primary text-primary-foreground rounded-full transition-all duration-300 hover:bg-primary/90 hover:scale-105 hover:tracking-wider hover:shadow-[0_0_20px_hsl(var(--primary))] active:scale-100"
               >
                 Enter the Party
               </Button>

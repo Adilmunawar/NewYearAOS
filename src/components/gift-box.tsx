@@ -34,7 +34,7 @@ export default function GiftBox({ onClick }: GiftBoxProps) {
     <div
       onClick={handleClick}
       className={cn(
-        "group relative w-48 h-48 cursor-pointer flex items-end justify-center perspective-[1000px]",
+        "group relative w-36 h-36 sm:w-48 sm:h-48 cursor-pointer flex items-end justify-center perspective-[1000px]",
         isAnimating ? '' : 'hover:[&>div]:-translate-y-2'
       )}
       style={{
@@ -43,7 +43,7 @@ export default function GiftBox({ onClick }: GiftBoxProps) {
       }}
     >
       <div className={cn(
-        "relative w-36 h-32 transition-transform duration-300 transform-style-3d",
+        "relative w-32 h-28 sm:w-36 sm:h-32 transition-transform duration-300 transform-style-3d",
         isAnimating ? '' : 'group-hover:scale-105',
         isOpened ? 'animate-shake' : ''
       )}>
@@ -60,7 +60,7 @@ export default function GiftBox({ onClick }: GiftBoxProps) {
         {/* Lid */}
         <div
           className={cn(
-            'absolute -top-4 left-1/2 -translate-x-1/2 w-[152px] h-8 bg-gradient-to-b from-primary to-yellow-600 rounded-t-md transition-transform duration-500 ease-out origin-bottom-right',
+            'absolute -top-4 left-1/2 -translate-x-1/2 w-[calc(100%_+_16px)] sm:w-[152px] h-8 bg-gradient-to-b from-primary to-yellow-600 rounded-t-md transition-transform duration-500 ease-out origin-bottom-right',
             'transform-style-3d',
             isOpened && 'animate-lid-flip'
           )}
@@ -87,8 +87,8 @@ export default function GiftBox({ onClick }: GiftBoxProps) {
             "absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300",
             !isAnimating && "group-hover:opacity-100"
         )}>
-            <div className="flex items-center justify-center w-20 h-20 bg-background/50 rounded-full backdrop-blur-sm">
-                <Gift className="w-10 h-10 text-primary" />
+            <div className="flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-background/50 rounded-full backdrop-blur-sm">
+                <Gift className="w-8 h-8 sm:w-10 sm:h-10 text-primary" />
             </div>
         </div>
 
