@@ -43,9 +43,7 @@ const generatePathData = (path: [number, number][], cellSize: number) => {
   let d = `M ${path[0][1] * cellSize + halfCell} ${path[0][0] * cellSize + halfCell}`;
   
   for (let i = 1; i < path.length; i++) {
-    const prev = path[i - 1];
-    const current = path[i];
-    d += ` L ${current[1] * cellSize + halfCell} ${current[0] * cellSize + halfCell}`;
+    d += ` L ${path[i][1] * cellSize + halfCell} ${path[i][0] * cellSize + halfCell}`;
   }
   return d;
 };
