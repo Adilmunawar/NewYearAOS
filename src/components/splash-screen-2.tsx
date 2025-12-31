@@ -11,7 +11,7 @@ export default function SplashScreen2({ onReady }: SplashScreenProps) {
     <div className="fixed inset-0 flex flex-col items-center justify-center bg-background z-40 animate-fade-out" style={{ animationFillMode: 'forwards', animationDelay: '5.5s' }}>
       <div className="w-64 h-64 md:w-80 md:h-80 animate-fade-in-up relative">
         <Image 
-          src="/what.gif" 
+          src="/kiya.gif" 
           alt="Confused person GIF" 
           layout="fill" 
           objectFit="contain" 

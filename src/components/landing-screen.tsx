@@ -103,7 +103,7 @@ export default function LandingScreen({ onEnter, isExiting }: LandingScreenProps
       <div className={cn("absolute top-0 left-0 w-full h-1/2 bg-background transition-transform duration-1000 ease-in-out", isExiting ? '-translate-y-full' : 'translate-y-0')}></div>
       <div className={cn("absolute bottom-0 left-0 w-full h-1/2 bg-background transition-transform duration-1000 ease-in-out", isExiting ? 'translate-y-full' : 'translate-y-0')}></div>
 
-      <div className={cn("z-10 w-full max-w-6xl mx-auto px-4 transition-all duration-500 ease-in-out", isExiting ? 'opacity-0 scale-90' : 'opacity-100 scale-100 delay-300')}>
+      <div className={cn("z-10 w-full max-w-5xl mx-auto px-4 transition-all duration-500 ease-in-out", isExiting ? 'opacity-0 scale-90' : 'opacity-100 scale-100 delay-300')}>
         <div className="grid md:grid-cols-2 gap-8 items-center">
           
           {/* Left Column: Image */}
@@ -111,8 +111,8 @@ export default function LandingScreen({ onEnter, isExiting }: LandingScreenProps
              <Image 
                 src="/name.gif"
                 alt="Bunny animation"
-                width={400}
-                height={400}
+                width={300}
+                height={300}
                 unoptimized
                 priority
              />
