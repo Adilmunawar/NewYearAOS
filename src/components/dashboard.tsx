@@ -167,7 +167,7 @@ export default function Dashboard({ user }: { user: UserData }) {
           <DialogHeader>
             <DialogTitle className="text-primary text-glow-gold flex items-center gap-2">
               <PartyPopper />
-              Your Daily Dose of Dad Joke
+              Here's a Joke For You!
             </DialogTitle>
             <DialogDescription className="text-white/70 pt-4 text-base md:text-lg text-center">
               {currentJoke}

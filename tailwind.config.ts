@@ -128,11 +128,6 @@ export default {
           'from': { 'background-position': '200% 0' },
           'to': { 'background-position': '-200% 0' },
         },
-        'flip': {
-          '0%': { transform: 'rotateX(0deg)', opacity: '1' },
-          '50%': { transform: 'rotateX(90deg)', opacity: '0' },
-          '100%': { transform: 'rotateX(0deg)', opacity: '1' },
-        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
