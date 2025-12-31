@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { Gift } from 'lucide-react';
 
 interface GiftBoxProps {
-  onClick: (e: MouseEvent<HTMLDivElement>) => void;
+  onClick: (e: MouseEvent<HTMLDivElement>) => boolean;
 }
 
 export default function GiftBox({ onClick }: GiftBoxProps) {
@@ -13,20 +13,15 @@ export default function GiftBox({ onClick }: GiftBoxProps) {
 
   const handleClick = (e: MouseEvent<HTMLDivElement>) => {
     if (isLidFlipped) return;
-    setIsLidFlipped(true);
+    
+    const wasOpened = onClick(e);
 
-    try {
-      const audio = new Audio('/opening-sound.mp3');
-      audio.play();
-    } catch (error) {
-      console.error("Error playing sound:", error);
+    if (wasOpened) {
+      setIsLidFlipped(true);
+      setTimeout(() => {
+        setIsLidFlipped(false);
+      }, 1200);
     }
-
-    onClick(e);
-
-    setTimeout(() => {
-      setIsLidFlipped(false);
-    }, 1200);
   };
 
   return (

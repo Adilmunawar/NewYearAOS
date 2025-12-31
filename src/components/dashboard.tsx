@@ -65,10 +65,17 @@ export default function Dashboard({ user, onEnd }: { user: UserData; onEnd: () =
         description: `You need ${GIFT_COST} credits to open a gift. Solve the puzzle to earn more.`,
       });
       setIsPuzzleModalOpen(true);
-      return;
+      return false; // Indicate failure
     }
 
     setCredits(prev => prev - GIFT_COST);
+    
+    try {
+      const audio = new Audio('/opening-sound.mp3');
+      audio.play();
+    } catch (error) {
+      console.error("Error playing sound:", error);
+    }
     
     if (window.confetti && e.currentTarget) {
       const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
@@ -96,6 +103,7 @@ export default function Dashboard({ user, onEnd }: { user: UserData; onEnd: () =
       setJokeHistory(prev => [...prev, nextJoke]);
     }
     setIsJokeModalOpen(true);
+    return true; // Indicate success
   };
   
   const handleContinue = () => {
