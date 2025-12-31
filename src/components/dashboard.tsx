@@ -10,7 +10,7 @@ import Typewriter from './typewriter';
 import GiftBox from './gift-box';
 import WishesScreen from './wishes-screen';
 import Countdown from './countdown';
-import ZipPuzzle, { puzzles } from './zip-puzzle';
+import ZipPuzzle from './zip-puzzle';
 import { useToast } from '@/hooks/use-toast';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from './ui/dialog';
 import EndScreen from './end-screen';
@@ -23,10 +23,9 @@ const GIFT_COST = 10;
 
 interface DashboardProps {
   user: UserData;
-  onRestart: () => void;
 }
 
-export default function Dashboard({ user, onRestart }: DashboardProps) {
+export default function Dashboard({ user }: DashboardProps) {
   const [jokesRemaining, setJokesRemaining] = useState<string[]>([]);
   const [jokeHistory, setJokeHistory] = useState<string[]>([]);
   const [currentJoke, setCurrentJoke] = useState<string>('');
@@ -138,7 +137,7 @@ export default function Dashboard({ user, onRestart }: DashboardProps) {
   const roastMessage = roasts[user.department] || "Welcome! You're so special, we don't have a roast for you.";
 
   if (showEndScreen) {
-    return <EndScreen onRestart={onRestart} />;
+    return <EndScreen />;
   }
 
   if (showWishes) {
@@ -169,16 +168,16 @@ export default function Dashboard({ user, onRestart }: DashboardProps) {
       <main className="flex-grow flex flex-col items-center justify-center w-full mt-8 md:mt-12">
         <div className={cn("text-center mb-8 transition-opacity duration-500")}>
             <h2 className="text-2xl md:text-3xl font-bold text-white animate-fade-in-up" style={{ animationDelay: '0.4s' }}>Your Joke Treasury</h2>
-            <p className="text-white/50 animate-fade-in-up text-sm md:text-base" style={{ animationDelay: '0.5s' }}>Click a gift to reveal a treasure of questionable humor. Costs {GIFT_COST} credits.</p>
+            <p className="text-white/50 animate-fade-in-up text-sm md:text-base max-w-xs sm:max-w-none" style={{ animationDelay: '0.5s' }}>Click a gift to reveal a treasure of questionable humor. Costs {GIFT_COST} credits.</p>
         </div>
         
         <div className="absolute top-4 right-4 bg-black/30 backdrop-blur-sm p-2 px-4 rounded-full flex items-center gap-2 border border-primary/50 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
           <Star className="w-5 h-5 text-yellow-400" />
           <span className="text-lg font-bold text-white">{credits}</span>
-          <span className="text-sm text-white/70">Credits</span>
+          <span className="text-sm text-white/70 hidden sm:inline">Credits</span>
         </div>
 
-        <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+        <div className="flex flex-wrap justify-center items-center gap-4 sm:gap-8 md:gap-12 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
           <GiftBox onClick={getNewJoke} />
           <GiftBox onClick={getNewJoke} />
           <GiftBox onClick={getNewJoke} />
@@ -212,13 +211,13 @@ export default function Dashboard({ user, onRestart }: DashboardProps) {
 
       <Dialog open={isPuzzleModalOpen} onOpenChange={setIsPuzzleModalOpen}>
         <DialogContent className="max-w-md w-full bg-black/30 backdrop-blur-xl border-primary/50 text-white mx-4 p-0">
-          <DialogHeader className="p-6 pb-0">
+          <DialogHeader className="p-4 sm:p-6 pb-0">
             <DialogTitle className="text-primary text-glow-gold">Complete the Path</DialogTitle>
             <DialogDescription className="text-white/70">
               Click and drag from the blinking dot to connect the numbers in sequence and earn credits!
             </DialogDescription>
           </DialogHeader>
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             <ZipPuzzle puzzleConfig={puzzles[selectedPuzzleIndex]} onSolve={handlePuzzleSolve} key={selectedPuzzleIndex} />
           </div>
         </DialogContent>

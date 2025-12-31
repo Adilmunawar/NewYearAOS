@@ -62,8 +62,8 @@ export default function Countdown({ startYear, endYear, onComplete }: CountdownP
   const yearDigits = year.toString().padStart(4, '0').split('');
 
   return (
-    <div className="fixed inset-0 flex flex-col items-center justify-center bg-background z-50 animate-fade-in">
-      <div className="flex gap-2 md:gap-4" >
+    <div className="fixed inset-0 flex flex-col items-center justify-center bg-background z-50 animate-fade-in p-4">
+      <div className="flex gap-1 sm:gap-2 md:gap-4" >
         {yearDigits.map((digit, index) => (
           <Digit key={index} value={digit} isFlipping={flippingDigits[index]} />
         ))}

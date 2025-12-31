@@ -29,7 +29,7 @@ const triggerConfetti = () => {
     
     // Left side
     window.confetti({
-      particleCount: 2,
+      particleCount: 1,
       angle: 60,
       spread: 55,
       origin: { x: 0, y: 1 },
@@ -37,14 +37,14 @@ const triggerConfetti = () => {
     });
     // Right side
     window.confetti({
-      particleCount: 2,
+      particleCount: 1,
       angle: 120,
       spread: 55,
       origin: { x: 1, y: 1 },
       colors
     });
 
-    if (Date.now() % 3 === 0) {
+    if (Date.now() % 5 === 0) { // Reduced frequency of random confetti
         window.confetti({ particleCount: 1, spread: 360, ticks: 60, zIndex: 0, origin: { x: randomInRange(0.1, 0.9), y: Math.random() - 0.2 }, colors });
     }
 
@@ -110,7 +110,7 @@ export default function WishesScreen({ wishes, onDone }: WishesScreenProps) {
 
             <div className="animate-fade-in-up" style={{animationDelay: '0.5s'}}>
               <p className="mt-4 text-base md:text-xl text-primary text-glow-gold">"{wishes.quote}"</p>
-              <p className="mt-6 md:mt-8 text-sm md:text-lg text-white/80 leading-relaxed max-w-2xl">
+              <p className="mt-6 md:mt-8 text-sm md:text-lg text-white/80 leading-relaxed max-w-xs sm:max-w-2xl">
                   {wishes.wish}
               </p>
             </div>

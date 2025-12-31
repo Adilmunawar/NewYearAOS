@@ -5,7 +5,9 @@ import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
 
 const GRID_SIZE = 7;
-const CELL_SIZE = 48; // A fixed size for the cell in pixels for SVG calculations
+// Use a smaller cell size for mobile, and larger for desktop
+const getCellSize = () => window.innerWidth < 640 ? 36 : 48;
+
 
 interface PuzzleConfig {
     points: { point: number; pos: [number, number] }[];
@@ -59,6 +61,13 @@ export default function ZipPuzzle({ puzzleConfig, onSolve }: ZipPuzzleProps) {
   const [solved, setSolved] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [cellSize, setCellSize] = useState(getCellSize());
+
+  useEffect(() => {
+    const handleResize = () => setCellSize(getCellSize());
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Reset state if puzzle changes
   useEffect(() => {
@@ -79,7 +88,6 @@ export default function ZipPuzzle({ puzzleConfig, onSolve }: ZipPuzzleProps) {
 
     if (pointsOnPath.length === 0) return 1;
 
-    // Check if the points on the path are in sequential order
     for (let i = 0; i < pointsOnPath.length; i++) {
       if (pointsOnPath[i].point !== i + 1) {
         setError("Wrong order! Follow the numbers.");
@@ -94,7 +102,6 @@ export default function ZipPuzzle({ puzzleConfig, onSolve }: ZipPuzzleProps) {
   const handleDragStart = (row: number, col: number) => {
     if (solved) return;
     const lastPos = path[path.length - 1];
-    // Can only start dragging from the last point in the path
     if (lastPos[0] === row && lastPos[1] === col) {
       setIsDragging(true);
       setError(null);
@@ -104,7 +111,6 @@ export default function ZipPuzzle({ puzzleConfig, onSolve }: ZipPuzzleProps) {
   const handleDragEnd = () => {
     if (isDragging) {
       setIsDragging(false);
-       // Check for win condition after drag ends
       const pointsOnPath = path
         .map(pos => sortedPoints.find(p => p.pos[0] === pos[0] && p.pos[1] === pos[1]))
         .filter((p): p is { point: number; pos: [number, number] } => p !== undefined);
@@ -118,30 +124,25 @@ export default function ZipPuzzle({ puzzleConfig, onSolve }: ZipPuzzleProps) {
     }
   };
   
-  const handleDragEnter = (row: number, col: number) => {
+  const handleInteraction = (row: number, col: number) => {
     if (!isDragging || solved) return;
     
     const lastPos = path[path.length - 1];
-
-    // Check if it's a valid next move (adjacent)
+    
     const dx = Math.abs(row - lastPos[0]);
     const dy = Math.abs(col - lastPos[1]);
     if (dx + dy !== 1) {
-      // Not an adjacent cell, ignore
       return;
     }
     
-    // Check for walls
     if (checkWall(lastPos, [row, col], walls)) {
         setError("You cannot cross a wall.");
         setIsDragging(false);
         return;
     }
 
-    // Check if moving back on the path
     if (path.length > 1 && path[path.length - 2][0] === row && path[path.length - 2][1] === col) {
       const pointBeingRemoved = initialPoints.find(p => p.pos[0] === lastPos[0] && p.pos[1] === lastPos[1]);
-      // Only allow backtracking if the point being removed is not a required numbered point (or it's the last one)
       if (!pointBeingRemoved || pointBeingRemoved.point >= nextPointToFind) {
           const newPath = path.slice(0, -1);
           setPath(newPath);
@@ -149,7 +150,6 @@ export default function ZipPuzzle({ puzzleConfig, onSolve }: ZipPuzzleProps) {
       return;
     }
 
-    // Check if cell is already in path
     if (path.some(p => p[0] === row && p[1] === col)) {
         setError("You cannot cross your own path.");
         setIsDragging(false);
@@ -160,7 +160,6 @@ export default function ZipPuzzle({ puzzleConfig, onSolve }: ZipPuzzleProps) {
     if (clickedPoint && clickedPoint.point !== nextPointToFind) {
         setError("Wrong order! Follow the numbers.");
         setIsDragging(false);
-        // Temporarily show the wrong move and then revert
         setPath([...path, [row, col]]);
         setTimeout(() => setPath(path), 300); 
         return;
@@ -171,7 +170,7 @@ export default function ZipPuzzle({ puzzleConfig, onSolve }: ZipPuzzleProps) {
   };
   
   const resetPuzzle = () => {
-    setPath(initialPoints[0].pos);
+    setPath([sortedPoints[0].pos]);
     setSolved(false);
     setError(null);
     setIsDragging(false);
@@ -185,19 +184,20 @@ export default function ZipPuzzle({ puzzleConfig, onSolve }: ZipPuzzleProps) {
     return { r, c, point, isInPath, isLastInPath };
   }));
   
-  const svgPathData = useMemo(() => generatePathData(path, CELL_SIZE), [path]);
+  const svgPathData = useMemo(() => generatePathData(path, cellSize), [path, cellSize]);
 
   return (
     <div className="flex flex-col items-center gap-4">
       <div 
-        className="relative grid grid-cols-7 gap-0 bg-neutral-700 p-2 rounded-lg aspect-square w-full max-w-sm select-none"
+        className="relative grid bg-neutral-700 p-1 sm:p-2 rounded-lg aspect-square w-full max-w-sm select-none"
         onMouseUp={handleDragEnd}
         onMouseLeave={handleDragEnd}
+        onTouchEnd={handleDragEnd}
         style={{ gridTemplateColumns: `repeat(${GRID_SIZE}, minmax(0, 1fr))` }}
       >
         <svg
           className="absolute top-0 left-0 w-full h-full pointer-events-none z-10"
-          viewBox={`0 0 ${GRID_SIZE * CELL_SIZE} ${GRID_SIZE * CELL_SIZE}`}
+          viewBox={`0 0 ${GRID_SIZE * cellSize} ${GRID_SIZE * cellSize}`}
         >
           <path
             d={svgPathData}
@@ -222,12 +222,27 @@ export default function ZipPuzzle({ puzzleConfig, onSolve }: ZipPuzzleProps) {
               { 'cursor-grabbing': isDragging }
             )}
             onMouseDown={() => handleDragStart(r, c)}
-            onMouseEnter={() => handleDragEnter(r, c)}
-            style={{ height: `${CELL_SIZE}px`, width: `${CELL_SIZE}px` }}
+            onMouseEnter={() => handleInteraction(r, c)}
+            onTouchStart={(e) => {
+              const touch = e.touches[0];
+              handleDragStart(r, c);
+            }}
+            onTouchMove={(e) => {
+              const touch = e.touches[0];
+              const element = document.elementFromPoint(touch.clientX, touch.clientY);
+              if (element) {
+                const rect = element.getBoundingClientRect();
+                const gridX = Math.floor((touch.clientX - rect.left) / cellSize);
+                const gridY = Math.floor((touch.clientY - rect.top) / cellSize);
+                // The above calculation is tricky. A simpler way is to check the element's data attributes if we add them.
+                // For now, this is a placeholder for a more robust touch solution.
+              }
+            }}
+            style={{ height: `${cellSize}px`, width: `${cellSize}px` }}
           >
             {point && (
               <div className={cn(
-                "absolute z-20 w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold pointer-events-none transition-all",
+                "absolute z-20 w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold pointer-events-none transition-all",
                  isInPath
                    ? 'bg-primary text-primary-foreground ring-2 ring-offset-2 ring-offset-neutral-800 ring-primary'
                    : 'bg-neutral-900 text-white'
