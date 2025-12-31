@@ -8,7 +8,22 @@ export const jokes = {
     "Why are cartographers so good at relationships? They know how to handle projections.",
     "What do you call a map that's always lying? A pseudo-map.",
     "Why don't cartographers play hide and seek? Because they always give away their position.",
-    "What is a GIS analyst's favorite band? 'The Eagles', because they do great aerial surveys."
+    "What is a GIS analyst's favorite band? 'The Eagles', because they do great aerial surveys.",
+    "Why was the shapefile so stressed? It had too many layers of issues.",
+    "What did the geodatabase say to the shapefile? 'You need to get your life structured.'",
+    "Why did the raster image go to therapy? It had serious resolution issues.",
+    "You might be a GIS professional if you've ever tried to buffer your personal space.",
+    "Why are GIS jokes the best? They have a global reach.",
+    "What's a cartographer's favorite dessert? A la-mode with extra coordinates.",
+    "Why did the polygon break up with the polyline? It felt too enclosed.",
+    "How does a GIS expert order a pizza? By giving the exact coordinates of their house.",
+    "What did the GPS say to the driver? 'In 200 feet, you have reached your destination... or a statistically significant approximation thereof.'",
+    "Why don't GIS people get lost? They always find their bearings.",
+    "What's the most romantic thing a GIS analyst can say? 'My love for you has no boundaries.'",
+    "Why did the map go to school? To improve its projection.",
+    "What do you call a sad point on a map? A blue dot.",
+    "Why was the map legend so popular? It knew how to explain everything.",
+    "Why did the surveyor get a promotion? He was outstanding in his field."
   ],
   PLRA: [
     "Why did the land registrar bring a ladder to work? To reach the high court!",
