@@ -36,7 +36,7 @@ export default function Dashboard({ user }: { user: UserData }) {
     resetJokes();
   }, [resetJokes]);
 
-  const getNewJoke = (e: MouseEvent<HTMLDivElement>) => {
+  const getNewJoke = () => {
     if (jokesRemaining.length === 0) {
       const shuffled = shuffleArray(departmentJokes.filter(j => j !== currentJoke));
       setJokesRemaining(shuffled.slice(1));
