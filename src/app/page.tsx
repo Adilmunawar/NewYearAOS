@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import LandingScreen from '@/components/landing-screen';
 import Dashboard from '@/components/dashboard';
 import SplashScreen from '@/components/splash-screen';
@@ -14,13 +14,20 @@ export default function Home() {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [isExiting, setIsExiting] = useState(false);
   const [currentScreen, setCurrentScreen] = useState('splash'); // 'splash', 'landing', 'dashboard'
+  const [isSplashReady, setIsSplashReady] = useState(false);
 
   useEffect(() => {
+    if (!isSplashReady) return;
+
     const splashTimer = setTimeout(() => {
       setCurrentScreen('landing');
     }, 4000);
 
     return () => clearTimeout(splashTimer);
+  }, [isSplashReady]);
+
+  const handleSplashReady = useCallback(() => {
+    setIsSplashReady(true);
   }, []);
 
 
@@ -35,13 +42,13 @@ export default function Home() {
   const renderScreen = () => {
     switch (currentScreen) {
       case 'splash':
-        return <SplashScreen />;
+        return <SplashScreen onReady={handleSplashReady} />;
       case 'landing':
         return <LandingScreen onEnter={handleEnter} isExiting={isExiting} />;
       case 'dashboard':
         return userData ? <Dashboard user={userData} /> : null;
       default:
-        return <SplashScreen />;
+        return <SplashScreen onReady={handleSplashReady} />;
     }
   }
 
