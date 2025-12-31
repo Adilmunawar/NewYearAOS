@@ -40,7 +40,11 @@ export default function Dashboard({ user, onRestart }: DashboardProps) {
   const { toast } = useToast();
   
   const departmentJokes = useMemo(() => jokes[user.department] || [], [user.department]);
-  const departmentWishes = useMemo(() => newYearWishes[user.department], [user.department]);
+  const departmentWishes = useMemo(() => {
+    const wishesForDept = newYearWishes[user.department];
+    const randomIndex = Math.floor(Math.random() * wishesForDept.length);
+    return wishesForDept[randomIndex];
+  }, [user.department]);
 
   const resetJokes = useCallback(() => {
     const shuffled = shuffleArray(departmentJokes);

@@ -27,11 +27,7 @@ const triggerConfettiBlast = (e: React.MouseEvent<HTMLButtonElement>) => {
     }
 }
 
-interface EndScreenProps {
-  onRestart: () => void;
-}
-
-export default function EndScreen({ onRestart }: EndScreenProps) {
+export default function EndScreen() {
   return (
     <div className="fixed inset-0 w-full h-full flex flex-col items-center justify-center p-4 z-50 bg-background overflow-hidden animate-fade-in">
         <div className="relative z-10 text-center max-w-3xl flex flex-col items-center animate-fade-in-up">
@@ -51,8 +47,8 @@ export default function EndScreen({ onRestart }: EndScreenProps) {
             </Button>
 
             <div className="mt-12 animate-fade-in-up" style={{animationDelay: '0.5s'}}>
-              <div className="relative w-24 h-24 rounded-full overflow-hidden mx-auto mb-4 border-2 border-primary shadow-lg">
-                <Image src="/image.png" alt="Developer" layout="fill" objectFit="cover" />
+              <div className="relative w-full max-w-sm mx-auto mb-4">
+                <Image src="/image.png" alt="Codebase commit history" width={500} height={200} className="rounded-lg shadow-lg" />
               </div>
               <p className="text-white/70 max-w-md mx-auto">
                 Meet the developer who gave you a tiny biny joy with his 8714 lines of code, one night debug and 66 commits.
