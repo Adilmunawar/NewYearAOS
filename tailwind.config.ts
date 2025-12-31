@@ -111,14 +111,22 @@ export default {
           '10%, 30%, 50%, 70%, 90%': { transform: 'translateX(-5px)' },
           '20%, 40%, 60%, 80%': { transform: 'translateX(5px)' },
         },
+        'aggressive-shake': {
+          '0%': { transform: 'rotate(0deg)' },
+          '5%': { transform: 'rotate(5deg)' },
+          '10%': { transform: 'rotate(-5deg)' },
+          '15%': { transform: 'rotate(5deg)' },
+          '20%': { transform: 'rotate(-5deg)' },
+          '25%': { transform: 'rotate(0deg)' },
+          '100%': { transform: 'rotate(0deg)' },
+        },
         'shimmer': {
           '0%': { backgroundPosition: '-500% 0' },
           '100%': { backgroundPosition: '500% 0' },
         },
-        'lid-flip': {
-            '0%': { transform: 'translateZ(0) rotateX(0)', opacity: '1' },
-            '40%': { transform: 'translateZ(30px) rotateX(45deg)', opacity: '1' },
-            '100%': { transform: 'translateZ(-200px) translateY(40px) rotateX(100deg)', opacity: '0' },
+        'lid-explode': {
+            '0%': { transform: 'translateZ(0px) rotateX(0deg)', opacity: '1' },
+            '100%': { transform: 'translateZ(300px) rotateX(45deg) rotateZ(90deg)', opacity: '0' },
         },
         'bow-fly': {
             '0%': { transform: 'translateZ(0) rotate(0deg) scale(1)', opacity: '1' },
@@ -146,8 +154,9 @@ export default {
         'scale-up': 'scale-up 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both',
         'bob': 'bob 4s ease-in-out infinite',
         'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
+        'aggressive-shake': 'aggressive-shake 0.5s ease-in-out infinite',
         'shimmer': 'shimmer 4s linear infinite',
-        'lid-flip': 'lid-flip 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards',
+        'lid-explode': 'lid-explode 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards',
         'bow-fly': 'bow-fly 0.8s ease-in forwards',
         'sparkle': 'sparkle 1s ease-out forwards',
       },

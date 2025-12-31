@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, type MouseEvent } from 'react';
 import type { UserData } from '@/app/page';
 import { jokes, roasts, newYearWishes } from '@/lib/data';
 import { Button } from './ui/button';
@@ -36,7 +36,7 @@ export default function Dashboard({ user }: { user: UserData }) {
     resetJokes();
   }, [resetJokes]);
 
-  const getNewJoke = () => {
+  const getNewJoke = (e: MouseEvent<HTMLDivElement>) => {
     if (jokesRemaining.length === 0) {
       const shuffled = shuffleArray(departmentJokes.filter(j => j !== currentJoke));
       setJokesRemaining(shuffled.slice(1));
