@@ -7,6 +7,7 @@ import { Input } from './ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { Map, Landmark } from 'lucide-react';
+import Image from 'next/image';
 
 interface LandingScreenProps {
   onEnter: (data: UserData) => void;
@@ -62,14 +63,14 @@ const DepartmentCard = ({
       onMouseLeave={handleMouseLeave}
       onClick={onSelect}
       className={cn(
-        'relative w-full max-w-[240px] md:w-64 h-64 md:h-80 rounded-2xl p-4 md:p-6 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 transform-style-3d bg-black/20 backdrop-blur-md border',
+        'relative w-full max-w-[200px] md:w-56 h-56 md:h-64 rounded-2xl p-4 md:p-6 flex flex-col items-center justify-center cursor-pointer transition-all duration-300 transform-style-3d bg-black/20 backdrop-blur-md border',
         selected ? 'border-primary ring-2 ring-primary' : 'border-white/10',
         `hover:${shadowClass} hover:border-primary`
       )}
     >
       <div className="transform-style-3d transform translate-z-20 text-center">
-        <Icon className={cn('mx-auto h-12 w-12 mb-3 transition-colors duration-300', selected ? 'text-primary' : 'text-white/80', `group-hover:${glowClass}`)} />
-        <h3 className={cn('text-lg md:text-2xl font-bold transition-colors duration-300', selected ? 'text-primary text-glow-gold' : 'text-white')}>{title}</h3>
+        <Icon className={cn('mx-auto h-10 w-10 md:h-12 md:w-12 mb-3 transition-colors duration-300', selected ? 'text-primary' : 'text-white/80', `group-hover:${glowClass}`)} />
+        <h3 className={cn('text-base md:text-xl font-bold transition-colors duration-300', selected ? 'text-primary text-glow-gold' : 'text-white')}>{title}</h3>
         <p className="text-white/60 mt-2 text-xs md:text-sm">{description}</p>
       </div>
       <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-2xl opacity-50"></div>
@@ -102,62 +103,80 @@ export default function LandingScreen({ onEnter, isExiting }: LandingScreenProps
       <div className={cn("absolute top-0 left-0 w-full h-1/2 bg-background transition-transform duration-1000 ease-in-out", isExiting ? '-translate-y-full' : 'translate-y-0')}></div>
       <div className={cn("absolute bottom-0 left-0 w-full h-1/2 bg-background transition-transform duration-1000 ease-in-out", isExiting ? 'translate-y-full' : 'translate-y-0')}></div>
 
-      <div className={cn("z-10 flex flex-col items-center justify-center w-full transition-all duration-500 ease-in-out", isExiting ? 'opacity-0 scale-90' : 'opacity-100 scale-100 delay-300')}>
-        <div className="text-center mb-4 md:mb-8 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-          <h1 className="text-3xl sm:text-5xl md:text-7xl font-black text-white">AOS New Year</h1>
-          <h2 className="text-3xl sm:text-5xl md:text-7xl font-black text-primary text-glow-gold">Laughs</h2>
-          <p className="mt-2 md:mt-4 text-white/70 text-sm md:text-lg max-w-xs sm:max-w-none">Work hard, laugh harder. Let's start the year with a smile.</p>
-        </div>
-
-        <form onSubmit={handleSubmit} className="w-full max-w-md md:max-w-4xl animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-          <div className="relative p-4 sm:p-8 bg-black/20 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/5 to-transparent"></div>
-            <div className="relative z-10 flex flex-col items-center gap-4 md:gap-6">
-              <Input
-                type="text"
-                placeholder="Enter your name, hero..."
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full max-w-xs sm:max-w-sm h-12 text-center text-lg bg-black/30 border-white/20 focus:ring-primary focus:border-primary placeholder:text-white/40"
-              />
-
-              <div className="flex flex-col sm:flex-row gap-4 md:gap-8">
-                <DepartmentCard
-                  department="GIS"
-                  icon={Map}
-                  title="GIS Department"
-                  description="The titans of topology."
-                  selected={department === 'GIS'}
-                  onSelect={() => setDepartment('GIS')}
-                  glowClass="text-neon-green"
-                  shadowClass="shadow-[0_0_25px_theme(colors.neon-green/0.4)]"
-                />
-                <DepartmentCard
-                  department="PLRA"
-                  icon={Landmark}
-                  title="PLRA Department"
-                  description="The legends of land."
-                  selected={department === 'PLRA'}
-                  onSelect={() => setDepartment('PLRA')}
-                  glowClass="text-golden-amber"
-                  shadowClass="shadow-[0_0_25px_theme(colors.golden-amber/0.4)]"
-                />
-              </div>
-
-              <Button
-                type="submit"
-                size="lg"
-                className="h-12 px-10 text-base font-bold bg-primary text-primary-foreground rounded-full transition-all duration-300 hover:bg-primary/90 hover:scale-105 hover:tracking-wider hover:shadow-[0_0_20px_hsl(var(--primary))] active:scale-100"
-              >
-                Enter the Party
-              </Button>
-            </div>
-             {/* Gold shimmer effect */}
-            <div className="absolute top-0 left-0 w-full h-full rounded-2xl overflow-hidden pointer-events-none">
-              <div className="absolute top-0 left-0 w-1/2 h-full bg-gradient-to-l from-transparent to-primary/10 animate-shimmer"></div>
-            </div>
+      <div className={cn("z-10 w-full max-w-6xl mx-auto px-4 transition-all duration-500 ease-in-out", isExiting ? 'opacity-0 scale-90' : 'opacity-100 scale-100 delay-300')}>
+        <div className="grid md:grid-cols-2 gap-8 items-center">
+          
+          {/* Left Column: Image */}
+          <div className="hidden md:flex justify-center items-center animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+             <Image 
+                src="/name.gif"
+                alt="Bunny animation"
+                width={400}
+                height={400}
+                unoptimized
+                priority
+             />
           </div>
-        </form>
+
+          {/* Right Column: Content */}
+          <div className="flex flex-col items-center justify-center">
+            <div className="text-center mb-4 md:mb-6 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+              <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-white">AOS New Year</h1>
+              <h2 className="text-3xl sm:text-5xl md:text-6xl font-black text-primary text-glow-gold">Laughs</h2>
+              <p className="mt-2 md:mt-4 text-white/70 text-sm md:text-base max-w-xs sm:max-w-none">Work hard, laugh harder. Let's start the year with a smile.</p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="w-full max-w-md md:max-w-lg animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+              <div className="relative p-4 sm:p-6 bg-black/20 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/5 to-transparent"></div>
+                <div className="relative z-10 flex flex-col items-center gap-4 md:gap-6">
+                  <Input
+                    type="text"
+                    placeholder="Enter your name, hero..."
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="w-full max-w-xs sm:max-w-sm h-12 text-center text-lg bg-black/30 border-white/20 focus:ring-primary focus:border-primary placeholder:text-white/40"
+                  />
+
+                  <div className="flex flex-col sm:flex-row gap-4 md:gap-6">
+                    <DepartmentCard
+                      department="GIS"
+                      icon={Map}
+                      title="GIS Department"
+                      description="The titans of topology."
+                      selected={department === 'GIS'}
+                      onSelect={() => setDepartment('GIS')}
+                      glowClass="text-neon-green"
+                      shadowClass="shadow-[0_0_25px_theme(colors.neon-green/0.4)]"
+                    />
+                    <DepartmentCard
+                      department="PLRA"
+                      icon={Landmark}
+                      title="PLRA Department"
+                      description="The legends of land."
+                      selected={department === 'PLRA'}
+                      onSelect={() => setDepartment('PLRA')}
+                      glowClass="text-golden-amber"
+                      shadowClass="shadow-[0_0_25px_theme(colors.golden-amber/0.4)]"
+                    />
+                  </div>
+
+                  <Button
+                    type="submit"
+                    size="lg"
+                    className="h-12 px-10 text-base font-bold bg-primary text-primary-foreground rounded-full transition-all duration-300 hover:bg-primary/90 hover:scale-105 hover:tracking-wider hover:shadow-[0_0_20px_hsl(var(--primary))] active:scale-100"
+                  >
+                    Enter the Party
+                  </Button>
+                </div>
+                 {/* Gold shimmer effect */}
+                <div className="absolute top-0 left-0 w-full h-full rounded-2xl overflow-hidden pointer-events-none">
+                  <div className="absolute top-0 left-0 w-1/2 h-full bg-gradient-to-l from-transparent to-primary/10 animate-shimmer"></div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   );
