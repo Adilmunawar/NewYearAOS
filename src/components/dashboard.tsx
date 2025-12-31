@@ -1,0 +1,139 @@
+'use client';
+
+import { useState, useEffect, useMemo, useCallback } from 'react';
+import type { UserData } from '@/app/page';
+import { jokes, roasts } from '@/lib/data';
+import { Button } from './ui/button';
+import { Camera, PartyPopper, RefreshCw } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import Typewriter from './typewriter';
+import GiftBox from './gift-box';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from './ui/dialog';
+
+const shuffleArray = <T,>(array: T[]): T[] => {
+  return [...array].sort(() => Math.random() - 0.5);
+};
+
+export default function Dashboard({ user }: { user: UserData }) {
+  const [jokesRemaining, setJokesRemaining] = useState<string[]>([]);
+  const [jokeHistory, setJokeHistory] = useState<string[]>([]);
+  const [currentJoke, setCurrentJoke] = useState<string>('');
+  const [isJokeModalOpen, setIsJokeModalOpen] = useState(false);
+  const [isScreenshotMode, setIsScreenshotMode] = useState(false);
+  
+  const departmentJokes = useMemo(() => jokes[user.department] || [], [user.department]);
+
+  const resetJokes = useCallback(() => {
+    const shuffled = shuffleArray(departmentJokes);
+    setJokesRemaining(shuffled);
+    setJokeHistory([]);
+  }, [departmentJokes]);
+
+  useEffect(() => {
+    resetJokes();
+  }, [resetJokes]);
+
+  const getNewJoke = () => {
+    if (jokesRemaining.length === 0) {
+      // All jokes shown, reshuffle
+      const shuffled = shuffleArray(departmentJokes.filter(j => j !== currentJoke));
+      setJokesRemaining(shuffled.slice(1));
+      setJokeHistory([shuffled[0]]);
+      setCurrentJoke(shuffled[0]);
+    } else {
+      const nextJoke = jokesRemaining[0];
+      setCurrentJoke(nextJoke);
+      setJokesRemaining(prev => prev.slice(1));
+      setJokeHistory(prev => [...prev, nextJoke]);
+    }
+    setIsJokeModalOpen(true);
+  };
+  
+  const handleScreenshot = () => {
+    setIsScreenshotMode(true);
+    if (window.confetti) {
+      const duration = 3 * 1000;
+      const end = Date.now() + duration;
+
+      (function frame() {
+        window.confetti({
+          particleCount: 2,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 },
+          colors: ['#FFBF00', '#FFD700', '#FFFFFF']
+        });
+        window.confetti({
+          particleCount: 2,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 },
+          colors: ['#FFBF00', '#FFD700', '#FFFFFF']
+        });
+
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      }());
+    }
+    setTimeout(() => setIsScreenshotMode(false), 4000);
+  };
+
+  const roastMessage = roasts[user.department] || "Welcome! You're so special, we don't have a roast for you.";
+
+  return (
+    <div className="min-h-screen w-full flex flex-col items-center p-4 md:p-8 relative overflow-hidden">
+      {/* Parallax Background Elements */}
+      <div className="absolute -top-20 -left-20 w-40 h-40 bg-primary/10 rounded-full animate-bob" style={{ animationDelay: '0s', animationDuration: '8s' }}></div>
+      <div className="absolute -bottom-20 -right-10 w-60 h-60 bg-primary/10 rounded-full animate-bob" style={{ animationDelay: '-2s', animationDuration: '12s' }}></div>
+      <div className="absolute top-1/2 left-1/4 w-20 h-20 bg-secondary/20 rounded-full animate-bob" style={{ animationDelay: '-4s', animationDuration: '10s' }}></div>
+
+
+      <header className={cn("w-full max-w-5xl text-center transition-opacity duration-500", isScreenshotMode ? 'opacity-0' : 'opacity-100', 'animate-fade-in-up' )}>
+        <h1 className="text-4xl md:text-5xl font-black">
+          <span className="text-white/80">Welcome, </span>
+          <span className="text-primary text-glow-gold"><Typewriter text={user.name} /></span>
+        </h1>
+        <p className="mt-4 text-white/60 text-lg max-w-3xl mx-auto animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+          {roastMessage}
+        </p>
+      </header>
+
+      <main className="flex-grow flex flex-col items-center justify-center w-full mt-12 md:mt-16">
+        <div className={cn("text-center mb-8 transition-opacity duration-500", isScreenshotMode ? 'opacity-0' : 'opacity-100')}>
+            <h2 className="text-3xl font-bold text-white animate-fade-in-up" style={{ animationDelay: '0.4s' }}>Choose Your Laugh</h2>
+            <p className="text-white/50 animate-fade-in-up" style={{ animationDelay: '0.5s' }}>Click a gift to reveal a (probably terrible) joke.</p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-12 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+          <GiftBox onClick={getNewJoke} />
+          <GiftBox onClick={getNewJoke} />
+          <GiftBox onClick={getNewJoke} />
+        </div>
+      </main>
+
+      <footer className={cn("w-full flex justify-center items-center gap-4 mt-12 transition-opacity duration-500", isScreenshotMode ? 'opacity-0' : 'opacity-100')}>
+        <Button onClick={handleScreenshot} variant="outline" className="border-primary/50 text-primary hover:bg-primary/10 hover:text-primary hover:border-primary backdrop-blur-sm bg-black/20">
+          <Camera className="mr-2 h-4 w-4" />
+          Confetti Screenshot
+        </Button>
+        <Button onClick={resetJokes} variant="ghost" size="icon" aria-label="Reset Jokes">
+            <RefreshCw className="h-5 w-5"/>
+        </Button>
+      </footer>
+      
+      <Dialog open={isJokeModalOpen} onOpenChange={setIsJokeModalOpen}>
+        <DialogContent className="sm:max-w-md bg-black/30 backdrop-blur-xl border-primary/50 text-white">
+          <DialogHeader>
+            <DialogTitle className="text-primary text-glow-gold flex items-center gap-2">
+              <PartyPopper />
+              Your Daily Dose of Dad Joke
+            </DialogTitle>
+            <DialogDescription className="text-white/70 pt-4 text-lg text-center">
+              {currentJoke}
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
