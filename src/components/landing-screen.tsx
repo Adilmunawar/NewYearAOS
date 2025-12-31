@@ -107,7 +107,7 @@ export default function LandingScreen({ onEnter, isExiting }: LandingScreenProps
         <div className="grid md:grid-cols-2 gap-8 items-center">
           
           {/* Left Column: Image */}
-          <div className="hidden md:flex justify-center items-center animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+          <div className="hidden md:flex flex-col justify-center items-center animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
              <Image 
                 src="/name.gif"
                 alt="Bunny animation"
@@ -116,6 +116,7 @@ export default function LandingScreen({ onEnter, isExiting }: LandingScreenProps
                 unoptimized
                 priority
              />
+             <p className="mt-4 text-white/70 animate-fade-in-up" style={{ animationDelay: '0.5s' }}>apna name likhoo zara idhar...</p>
           </div>
 
           {/* Right Column: Content */}
