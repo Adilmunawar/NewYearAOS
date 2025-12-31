@@ -8,6 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { Map, Landmark } from 'lucide-react';
 import Image from 'next/image';
+import InteractiveLogo from './interactive-logo';
 
 interface LandingScreenProps {
   onEnter: (data: UserData) => void;
@@ -104,30 +105,21 @@ export default function LandingScreen({ onEnter, isExiting }: LandingScreenProps
       <div className={cn("absolute bottom-0 left-0 w-full h-1/2 bg-background transition-transform duration-1000 ease-in-out", isExiting ? 'translate-y-full' : 'translate-y-0')}></div>
 
       <div className={cn("z-10 w-full max-w-5xl mx-auto px-4 transition-all duration-500 ease-in-out", isExiting ? 'opacity-0 scale-90' : 'opacity-100 scale-100 delay-300')}>
-        <div className="grid md:grid-cols-2 gap-8 items-center">
+        <div className="grid md:grid-cols-2 gap-4 md:gap-8 items-center">
           
-          {/* Left Column: Image */}
+          {/* Left Column: Logo */}
           <div className="hidden md:flex flex-col justify-center items-center animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-             <Image 
-                src="/name.gif"
-                alt="Bunny animation"
-                width={250}
-                height={250}
-                unoptimized
-                priority
-             />
-             <p className="mt-4 text-white/70 animate-fade-in-up" style={{ animationDelay: '0.5s' }}>apna name likhoo zara idhar...</p>
+             <InteractiveLogo />
           </div>
 
           {/* Right Column: Content */}
           <div className="flex flex-col items-center justify-center">
-            <div className="text-center mb-4 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-white">AOS New Year</h1>
-              <h2 className="text-4xl sm:text-5xl md:text-6xl font-black text-primary text-glow-gold">Laughs</h2>
-              <p className="mt-2 md:mt-4 text-white/70 text-sm md:text-base max-w-xs sm:max-w-none">Work hard, laugh harder. Let's start the year with a smile.</p>
+             {/* Logo for mobile */}
+            <div className="md:hidden flex flex-col justify-center items-center animate-fade-in-up mb-4" style={{ animationDelay: '0.3s' }}>
+               <InteractiveLogo />
             </div>
 
-            <form onSubmit={handleSubmit} className="w-full max-w-md md:max-w-lg animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+            <form onSubmit={handleSubmit} className="w-full max-w-md md:max-w-sm animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
               <div className="relative p-4 sm:p-6 bg-black/20 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/5 to-transparent"></div>
                 <div className="relative z-10 flex flex-col items-center gap-4">
