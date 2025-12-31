@@ -4,17 +4,21 @@ import { useState, useEffect, useMemo, useCallback, type MouseEvent } from 'reac
 import type { UserData } from '@/app/page';
 import { jokes, roasts, newYearWishes } from '@/lib/data';
 import { Button } from './ui/button';
-import { PartyPopper, RefreshCw } from 'lucide-react';
+import { PartyPopper, RefreshCw, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Typewriter from './typewriter';
 import GiftBox from './gift-box';
 import WishesScreen from './wishes-screen';
 import Countdown from './countdown';
+import ZipPuzzle from './zip-puzzle';
+import { useToast } from '@/hooks/use-toast';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from './ui/dialog';
 
 const shuffleArray = <T,>(array: T[]): T[] => {
   return [...array].sort(() => Math.random() - 0.5);
 };
+
+const GIFT_COST = 10;
 
 export default function Dashboard({ user }: { user: UserData }) {
   const [jokesRemaining, setJokesRemaining] = useState<string[]>([]);
@@ -23,6 +27,9 @@ export default function Dashboard({ user }: { user: UserData }) {
   const [isJokeModalOpen, setIsJokeModalOpen] = useState(false);
   const [showWishes, setShowWishes] = useState(false);
   const [showCountdown, setShowCountdown] = useState(false);
+  const [credits, setCredits] = useState(0);
+  const [isPuzzleModalOpen, setIsPuzzleModalOpen] = useState(false);
+  const { toast } = useToast();
   
   const departmentJokes = useMemo(() => jokes[user.department] || [], [user.department]);
   const departmentWishes = useMemo(() => newYearWishes[user.department], [user.department]);
@@ -37,7 +44,30 @@ export default function Dashboard({ user }: { user: UserData }) {
     resetJokes();
   }, [resetJokes]);
 
+  const handlePuzzleSolve = () => {
+    const newCredits = credits + GIFT_COST;
+    setCredits(newCredits);
+    setIsPuzzleModalOpen(false);
+    toast({
+      title: 'Puzzle Solved!',
+      description: `You've earned ${GIFT_COST} credits!`,
+      className: 'bg-green-600/80 border-green-500 text-white',
+    });
+  };
+
   const getNewJoke = (e: MouseEvent<HTMLDivElement>) => {
+    if (credits < GIFT_COST) {
+      toast({
+        variant: 'destructive',
+        title: 'Insufficient Credits!',
+        description: `You need ${GIFT_COST} credits to open a gift. Solve the puzzle to earn more.`,
+      });
+      setIsPuzzleModalOpen(true);
+      return;
+    }
+
+    setCredits(prev => prev - GIFT_COST);
+    
     if (window.confetti && e.currentTarget) {
       const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
       window.confetti({
@@ -110,8 +140,15 @@ export default function Dashboard({ user }: { user: UserData }) {
       <main className="flex-grow flex flex-col items-center justify-center w-full mt-8 md:mt-12">
         <div className={cn("text-center mb-8 transition-opacity duration-500")}>
             <h2 className="text-2xl md:text-3xl font-bold text-white animate-fade-in-up" style={{ animationDelay: '0.4s' }}>Your Joke Treasury</h2>
-            <p className="text-white/50 animate-fade-in-up text-sm md:text-base" style={{ animationDelay: '0.5s' }}>Click a gift to reveal a treasure of questionable humor.</p>
+            <p className="text-white/50 animate-fade-in-up text-sm md:text-base" style={{ animationDelay: '0.5s' }}>Click a gift to reveal a treasure of questionable humor. Costs {GIFT_COST} credits.</p>
         </div>
+        
+        <div className="absolute top-4 right-4 bg-black/30 backdrop-blur-sm p-2 px-4 rounded-full flex items-center gap-2 border border-primary/50 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
+          <Star className="w-5 h-5 text-yellow-400" />
+          <span className="text-lg font-bold text-white">{credits}</span>
+          <span className="text-sm text-white/70">Credits</span>
+        </div>
+
         <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 animate-fade-in-up" style={{ animationDelay: '0.6s' }}>
           <GiftBox onClick={getNewJoke} />
           <GiftBox onClick={getNewJoke} />
@@ -141,6 +178,20 @@ export default function Dashboard({ user }: { user: UserData }) {
               Continue
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={isPuzzleModalOpen} onOpenChange={setIsPuzzleModalOpen}>
+        <DialogContent className="max-w-md w-full bg-black/30 backdrop-blur-xl border-primary/50 text-white mx-4 p-0">
+          <DialogHeader className="p-6 pb-0">
+            <DialogTitle className="text-primary text-glow-gold">Complete the Path</DialogTitle>
+            <DialogDescription className="text-white/70">
+              Click the numbered dots in sequence to draw a path and earn credits!
+            </DialogDescription>
+          </DialogHeader>
+          <div className="p-6">
+            <ZipPuzzle onSolve={handlePuzzleSolve} />
+          </div>
         </DialogContent>
       </Dialog>
     </div>
