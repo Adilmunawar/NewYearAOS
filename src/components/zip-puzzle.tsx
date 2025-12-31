@@ -48,25 +48,16 @@ export default function ZipPuzzle({ onSolve }: ZipPuzzleProps) {
   const [isDragging, setIsDragging] = useState(false);
 
   const nextPointToFind = useMemo(() => {
-    const lastPointInPath = path[path.length - 1];
-    let lastFoundPointNumber = 0;
-  
     const pointsOnPath = path
         .map(pos => initialPoints.find(p => p.pos[0] === pos[0] && p.pos[1] === pos[1]))
-        .filter(p => p !== undefined);
+        .filter((p): p is { point: number; pos: [number, number]; } => p !== undefined);
 
-    if (pointsOnPath.length > 0) {
-        lastFoundPointNumber = Math.max(...pointsOnPath.map(p => p!.point));
+    if (pointsOnPath.length === initialPoints.length) {
+      return initialPoints.length + 1; // All points found
     }
-    
-    // Check if all points are on the path
-    const allPointsFound = initialPoints.every(p => path.some(pathPos => pathPos[0] === p.pos[0] && pathPos[1] === p.pos[1]));
 
-    if (allPointsFound) {
-      return initialPoints.length + 1;
-    }
-  
-    return lastFoundPointNumber + 1;
+    const maxPointFound = pointsOnPath.reduce((max, p) => Math.max(max, p.point), 0);
+    return maxPointFound + 1;
   }, [path]);
 
   const handleDragStart = (row: number, col: number) => {
@@ -83,9 +74,7 @@ export default function ZipPuzzle({ onSolve }: ZipPuzzleProps) {
     if (isDragging) {
       setIsDragging(false);
        // Check for win condition after drag ends
-      const targetPoint = initialPoints.find(p => p.point === initialPoints.length);
-      const lastPathPos = path[path.length - 1];
-      if (targetPoint && lastPathPos[0] === targetPoint.pos[0] && lastPathPos[1] === targetPoint.pos[1] && nextPointToFind > initialPoints.length) {
+      if (nextPointToFind > initialPoints.length) {
         setSolved(true);
         setTimeout(onSolve, 500);
       }
@@ -126,18 +115,18 @@ export default function ZipPuzzle({ onSolve }: ZipPuzzleProps) {
         return;
     }
 
-    const newPath = [...path, [row, col] as [number, number]];
-    setPath(newPath);
-
-    const targetPoint = initialPoints.find(p => p.point === nextPointToFind);
     const clickedPoint = initialPoints.find(p => p.pos[0] === row && p.pos[1] === col);
-
-    if (clickedPoint && (!targetPoint || clickedPoint.point !== targetPoint.point)) {
+    if (clickedPoint && clickedPoint.point !== nextPointToFind) {
         setError("Wrong order! Follow the numbers.");
         setIsDragging(false);
-        setTimeout(() => setPath(path), 300); // revert path
+        // Temporarily show the wrong move and then revert
+        setPath([...path, [row, col]]);
+        setTimeout(() => setPath(path), 300); 
         return;
     }
+
+    const newPath = [...path, [row, col] as [number, number]];
+    setPath(newPath);
   };
   
   const resetPuzzle = () => {
@@ -145,6 +134,46 @@ export default function ZipPuzzle({ onSolve }: ZipPuzzleProps) {
     setSolved(false);
     setError(null);
     setIsDragging(false);
+  }
+  
+  const getPathSegments = (r: number, c: number, path: [number, number][]) => {
+      const index = path.findIndex(p => p[0] === r && p[1] === c);
+      if (index === -1) return null;
+
+      const prev = index > 0 ? path[index - 1] : null;
+      const next = index < path.length - 1 ? path[index + 1] : null;
+
+      const segments = [];
+
+      // Line from previous cell
+      if (prev) {
+          if (prev[0] < r) segments.push(<div key="prev-t" className="absolute h-1/2 w-1.5 top-0 bg-primary pointer-events-none" />);
+          if (prev[0] > r) segments.push(<div key="prev-b" className="absolute h-1/2 w-1.5 bottom-0 bg-primary pointer-events-none" />);
+          if (prev[1] < c) segments.push(<div key="prev-l" className="absolute w-1/2 h-1.5 left-0 bg-primary pointer-events-none" />);
+          if (prev[1] > c) segments.push(<div key="prev-r" className="absolute w-1/2 h-1.5 right-0 bg-primary pointer-events-none" />);
+      }
+      
+      // Line to next cell
+      if (next) {
+          if (next[0] < r) segments.push(<div key="next-t" className="absolute h-1/2 w-1.5 top-0 bg-primary pointer-events-none" />);
+          if (next[0] > r) segments.push(<div key="next-b" className="absolute h-1/2 w-1.5 bottom-0 bg-primary pointer-events-none" />);
+          if (next[1] < c) segments.push(<div key="next-l" className="absolute w-1/2 h-1.5 left-0 bg-primary pointer-events-none" />);
+          if (next[1] > c) segments.push(<div key="next-r" className="absolute w-1/2 h-1.5 right-0 bg-primary pointer-events-none" />);
+      }
+
+      // Corner case for start and end points (half lines)
+      if (segments.length === 1) {
+        if(index === 0 && next) { // Start point
+          if (next[0] !== r) return <div className="absolute h-1/2 w-1.5 bg-primary pointer-events-none" style={{ top: next[0] > r ? '50%' : '0', bottom: next[0] < r ? '50%' : '0' }} />;
+          if (next[1] !== c) return <div className="absolute w-1/2 h-1.5 bg-primary pointer-events-none" style={{ left: next[1] > c ? '50%' : '0', right: next[1] < c ? '50%' : '0' }} />;
+        }
+        if(index === path.length - 1 && prev) { // Current end point
+          if (prev[0] !== r) return <div className="absolute h-1/2 w-1.5 bg-primary pointer-events-none" style={{ top: prev[0] > r ? '50%' : '0', bottom: prev[0] < r ? '50%' : '0' }} />;
+          if (prev[1] !== c) return <div className="absolute w-1/2 h-1.5 bg-primary pointer-events-none" style={{ left: prev[1] > c ? '50%' : '0', right: prev[1] < c ? '50%' : '0' }} />;
+        }
+      }
+      
+      return <>{segments}</>;
   }
 
   const grid = Array(GRID_SIZE).fill(null).map((_, r) => Array(GRID_SIZE).fill(null).map((__, c) => {
@@ -158,7 +187,7 @@ export default function ZipPuzzle({ onSolve }: ZipPuzzleProps) {
   return (
     <div className="flex flex-col items-center gap-4">
       <div 
-        className="grid grid-cols-7 gap-0.5 bg-neutral-700 p-2 rounded-lg aspect-square w-full max-w-sm select-none"
+        className="grid grid-cols-7 gap-0 bg-neutral-700 p-2 rounded-lg aspect-square w-full max-w-sm select-none"
         onMouseUp={handleDragEnd}
         onMouseLeave={handleDragEnd}
       >
@@ -169,7 +198,8 @@ export default function ZipPuzzle({ onSolve }: ZipPuzzleProps) {
               'relative aspect-square flex items-center justify-center rounded-sm transition-colors duration-200',
               'bg-neutral-800/50',
               { 'hover:bg-neutral-700/80': !isDragging },
-              { 'bg-primary/20': isInPath },
+              { 'bg-primary/10': isInPath && !isLastInPath },
+              { 'bg-primary/30': isLastInPath },
               { 'cursor-pointer': !solved && isLastInPath },
               { 'cursor-grab': isLastInPath && !isDragging },
               { 'cursor-grabbing': isDragging }
@@ -177,9 +207,10 @@ export default function ZipPuzzle({ onSolve }: ZipPuzzleProps) {
             onMouseDown={() => handleDragStart(r, c)}
             onMouseEnter={() => handleDragEnter(r, c)}
           >
+            {isInPath && getPathSegments(r, c, path)}
             {point && (
               <div className={cn(
-                "absolute z-10 w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold pointer-events-none",
+                "absolute z-10 w-6 h-6 rounded-full flex items-center justify-center text-sm font-bold pointer-events-none transition-all",
                  path.some(p => p[0] === r && p[1] === c)
                    ? 'bg-primary text-primary-foreground ring-2 ring-offset-2 ring-offset-neutral-800 ring-primary'
                    : 'bg-neutral-900 text-white'
@@ -187,25 +218,7 @@ export default function ZipPuzzle({ onSolve }: ZipPuzzleProps) {
                 {point.point}
               </div>
             )}
-            {/* Path lines */}
-            {isInPath && path.findIndex(p => p[0] === r && p[1] === c) < path.length -1 && (() => {
-              const nextPos = path[path.findIndex(p => p[0] === r && p[1] === c) + 1];
-              if (nextPos[0] < r) return <div className="absolute h-full w-1 top-0 bg-primary pointer-events-none" />;
-              if (nextPos[0] > r) return <div className="absolute h-full w-1 bottom-0 bg-primary pointer-events-none" />;
-              if (nextPos[1] < c) return <div className="absolute w-full h-1 right-0 bg-primary pointer-events-none" />;
-              if (nextPos[1] > c) return <div className="absolute w-full h-1 left-0 bg-primary pointer-events-none" />;
-              return null;
-            })()}
-             {/* Path line from previous cell to this one */}
-             {isInPath && path.findIndex(p => p[0] === r && p[1] === c) > 0 && (() => {
-              const prevPos = path[path.findIndex(p => p[0] === r && p[1] === c) - 1];
-              if (prevPos[0] > r) return <div className="absolute h-1/2 w-1 bottom-0 bg-primary pointer-events-none" />;
-              if (prevPos[0] < r) return <div className="absolute h-1/2 w-1 top-0 bg-primary pointer-events-none" />;
-              if (prevPos[1] > c) return <div className="absolute w-1/2 h-1 right-0 bg-primary pointer-events-none" />;
-              if (prevPos[1] < c) return <div className="absolute w-1/2 h-1 left-0 bg-primary pointer-events-none" />;
-              return null;
-            })()}
-
+           
             {/* Wall rendering */}
             {walls.map((wall, i) => {
                 // Horizontal wall
