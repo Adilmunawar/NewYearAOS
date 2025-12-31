@@ -13,16 +13,16 @@ interface PuzzleConfig {
 }
 
 export const puzzles: PuzzleConfig[] = [
-    { // Original "Z" like puzzle
+    { // Puzzle from the user's image
         points: [
-            { point: 1, pos: [0, 2] }, { point: 2, pos: [3, 0] }, { point: 3, pos: [4, 4] },
-            { point: 4, pos: [5, 3] }, { point: 5, pos: [4, 5] }, { point: 6, pos: [4, 6] },
-            { point: 7, pos: [3, 6] }, { point: 8, pos: [1, 2] }, { point: 9, pos: [1, 1] },
-            { point: 10, pos: [2, 1] }, { point: 11, pos: [2, 4] },
+            { point: 1, pos: [1, 4] }, { point: 2, pos: [1, 1] }, { point: 3, pos: [3, 1] },
+            { point: 4, pos: [3, 4] }, { point: 5, pos: [5, 4] }, { point: 6, pos: [5, 1] },
         ],
         walls: [
-            { from: [1, 3], to: [1, 4] }, { from: [1, 4], to: [2, 4] },
-            { from: [4, 1], to: [4, 2] }, { from: [4, 2], to: [5, 2] },
+            { from: [0, 2], to: [1, 2] }, { from: [2, 0], to: [2, 1] },
+            { from: [2, 2], to: [2, 3] }, { from: [2, 4], to: [2, 5] },
+            { from: [4, 1], to: [4, 2] }, { from: [4, 3], to: [4, 4] },
+            { from: [4, 5], to: [5, 5] }, { from: [6, 2], to: [5, 2] },
         ],
     },
     { // Puzzle shaped like a '2'
