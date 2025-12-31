@@ -25,13 +25,13 @@ const triggerConfetti = () => {
   const fire = (particleRatio: number, opts: any) => {
     window.confetti?.({
       ...opts,
-      particleCount: Math.floor(200 * particleRatio),
+      particleCount: Math.floor(100 * particleRatio), // Reduced from 200
     });
   };
 
-  // Initial burst
-  fire(1, { spread: 26, startVelocity: 55, origin: { x: 0, y: 1 } });
-  fire(1, { spread: 26, startVelocity: 55, origin: { x: 1, y: 1 } });
+  // Initial burst (less intense)
+  fire(0.8, { spread: 26, startVelocity: 55, origin: { x: 0, y: 1 } });
+  fire(0.8, { spread: 26, startVelocity: 55, origin: { x: 1, y: 1 } });
 
   const interval: NodeJS.Timeout = setInterval(function() {
     const timeLeft = animationEnd - Date.now();
@@ -40,18 +40,18 @@ const triggerConfetti = () => {
       return clearInterval(interval);
     }
 
-    const particleCount = 50 * (timeLeft / duration); // Reduced particle count for performance
+    const particleCount = 25 * (timeLeft / duration); // Reduced from 50
     
     // Poppers from corners
     window.confetti({ particleCount, angle: 60, spread: 55, origin: { x: 0, y: 1 }, colors });
     window.confetti({ particleCount, angle: 120, spread: 55, origin: { x: 1, y: 1 }, colors });
 
-    // Rain from top
-    if (Date.now() % 3 === 0) { // To make it less intense
+    // Rain from top (less frequent)
+    if (Date.now() % 5 === 0) {
         window.confetti({ particleCount: particleCount / 2, spread: 360, ticks: 60, zIndex: 0, origin: { x: randomInRange(0.1, 0.9), y: Math.random() - 0.2 }, colors });
     }
 
-  }, 350); // Increased interval
+  }, 450); // Increased interval from 350
 };
 
 export default function WishesScreen({ wishes, onDone }: WishesScreenProps) {

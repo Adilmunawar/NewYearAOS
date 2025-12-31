@@ -23,7 +23,19 @@ export const jokes = {
     "Why did the map go to school? To improve its projection.",
     "What do you call a sad point on a map? A blue dot.",
     "Why was the map legend so popular? It knew how to explain everything.",
-    "Why did the surveyor get a promotion? He was outstanding in his field."
+    "Why did the surveyor get a promotion? He was outstanding in his field.",
+    "Why was the GIS analyst always calm? Because he knew how to find his center.",
+    "What do you call a geographer who's a great singer? A map-star.",
+    "Why did the GIS analyst bring a ladder to the bar? He heard the drinks were on the house.",
+    "How do you comfort a sad map? You tell it, 'It's okay, every map has its ups and downs.'",
+    "What's a GIS analyst's favorite game? 'Risk', for obvious reasons.",
+    "Why are GIS professionals so good at solving problems? They're used to finding the best path.",
+    "Why did the map break up with the globe? It said the globe was too worldly.",
+    "What's a GIS analyst's favorite kind of music? Anything with a good baseline.",
+    "Why are maps so smart? Because they have a lot of degrees.",
+    "What did the north arrow say to the scale bar? 'You rule!'",
+    "Why did the coordinate system go to the party? To get on the grid.",
+    "How do you make a map laugh? Tell it a contour joke."
   ],
   PLRA: [
     "Why did the land registrar bring a ladder to work? To reach the high court!",
