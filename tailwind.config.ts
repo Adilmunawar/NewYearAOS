@@ -111,6 +111,30 @@ export default {
           '0%': { backgroundPosition: '-500% 0' },
           '100%': { backgroundPosition: '500% 0' },
         },
+        'lid-flip': {
+          '0%': { transform: 'rotate(0deg) translateX(0) translateY(0)', opacity: '1' },
+          '50%': { transform: 'rotate(-120deg) translateX(50px) translateY(-30px)', opacity: '1' },
+          '100%': { transform: 'rotate(-140deg) translateX(60px) translateY(-80px) scale(0.8)', opacity: '0' },
+        },
+        'bow-fly': {
+          '0%': { transform: 'rotate(0deg) scale(1)', opacity: '1' },
+          '100%': { transform: 'rotate(360deg) scale(0) translateY(-100px)', opacity: '0' },
+        },
+        'sparkle-1': {
+          '0%': { transform: 'translateY(0) scale(0)', opacity: '0'},
+          '50%': { transform: 'translateY(-40px) scale(1.2)', opacity: '1'},
+          '100%': { transform: 'translateY(-60px) scale(0)', opacity: '0'},
+        },
+        'sparkle-2': {
+          '0%': { transform: 'translateY(0) rotate(0deg) scale(0)', opacity: '0'},
+          '50%': { transform: 'translateY(-50px) rotate(180deg) scale(1)', opacity: '1'},
+          '100%': { transform: 'translateY(-70px) rotate(360deg) scale(0)', opacity: '0'},
+        },
+        'sparkle-3': {
+          '0%': { transform: 'translateY(0) rotate(0deg) scale(0)', opacity: '0'},
+          '50%': { transform: 'translateY(-30px) rotate(-180deg) scale(1.1)', opacity: '0.8'},
+          '100%': { transform: 'translateY(-50px) rotate(-360deg) scale(0)', opacity: '0'},
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -120,6 +144,11 @@ export default {
         'bob': 'bob 4s ease-in-out infinite',
         'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
         'shimmer': 'shimmer 4s linear infinite',
+        'lid-flip': 'lid-flip 0.8s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards',
+        'bow-fly': 'bow-fly 0.8s ease-in forwards',
+        'sparkle-1': 'sparkle-1 0.7s ease-out forwards',
+        'sparkle-2': 'sparkle-2 0.8s ease-out 0.1s forwards',
+        'sparkle-3': 'sparkle-3 0.9s ease-out 0.2s forwards',
       },
     },
   },
