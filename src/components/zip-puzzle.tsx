@@ -50,18 +50,19 @@ export default function ZipPuzzle({ onSolve }: ZipPuzzleProps) {
     const lastPointInPath = path[path.length - 1];
     let lastFoundPointNumber = 0;
   
-    // Find the number of the last point successfully captured in the path
-    for (let i = path.length - 1; i >= 0; i--) {
-      const pointOnPath = path[i];
-      const pointData = initialPoints.find(p => p.pos[0] === pointOnPath[0] && p.pos[1] === pointOnPath[1]);
-      if (pointData) {
-        lastFoundPointNumber = pointData.point;
-        break;
-      }
+    const pointsOnPath = path
+        .map(pos => initialPoints.find(p => p.pos[0] === pos[0] && p.pos[1] === pos[1]))
+        .filter(p => p !== undefined);
+
+    if (pointsOnPath.length > 0) {
+        lastFoundPointNumber = Math.max(...pointsOnPath.map(p => p!.point));
     }
-  
-    if (lastFoundPointNumber === initialPoints.length) {
-      return lastFoundPointNumber + 1; // Puzzle solved
+    
+    // Check if all points are on the path
+    const allPointsFound = initialPoints.every(p => path.some(pathPos => pathPos[0] === p.pos[0] && pathPos[1] === p.pos[1]));
+
+    if (allPointsFound) {
+      return initialPoints.length + 1;
     }
   
     return lastFoundPointNumber + 1;
@@ -80,6 +81,13 @@ export default function ZipPuzzle({ onSolve }: ZipPuzzleProps) {
   const handleDragEnd = () => {
     if (isDragging) {
       setIsDragging(false);
+       // Check for win condition after drag ends
+      const targetPoint = initialPoints.find(p => p.point === initialPoints.length);
+      const lastPathPos = path[path.length - 1];
+      if (targetPoint && lastPathPos[0] === targetPoint.pos[0] && lastPathPos[1] === targetPoint.pos[1] && nextPointToFind > initialPoints.length) {
+        setSolved(true);
+        setTimeout(onSolve, 500);
+      }
     }
   };
   
@@ -128,12 +136,6 @@ export default function ZipPuzzle({ onSolve }: ZipPuzzleProps) {
         setIsDragging(false);
         setTimeout(() => setPath(path), 300); // revert path
         return;
-    }
-    
-    // Check for win condition
-    if (nextPointToFind > initialPoints.length) {
-      setSolved(true);
-      setTimeout(onSolve, 500);
     }
   };
   
@@ -185,25 +187,23 @@ export default function ZipPuzzle({ onSolve }: ZipPuzzleProps) {
               </div>
             )}
             {/* Path lines */}
-            {isInPath && path.findIndex(p => p[0] === r && p[1] === c) < path.length -1 && (
-                <div className={cn("absolute bg-primary pointer-events-none", {
-                    'h-full w-1': path[path.findIndex(p => p[0] === r && p[1] === c) + 1][0] !== r, // vertical
-                    'w-full h-1': path[path.findIndex(p => p[0] === r && p[1] === c) + 1][1] !== c, // horizontal
-                    'top-1/2': path[path.findIndex(p => p[0] === r && p[1] === c) + 1][0] < r,
-                    'bottom-1/2': path[path.findIndex(p => p[0] === r && p[1] === c) + 1][0] > r,
-                    'left-1/2': path[path.findIndex(p => p[0] === r && p[1] === c) + 1][1] < c,
-                    'right-1/2': path[path.findIndex(p => p[0] === r && p[1] === c) + 1][1] > c,
-                })} />
-            )}
+            {isInPath && path.findIndex(p => p[0] === r && p[1] === c) < path.length -1 && (() => {
+              const nextPos = path[path.findIndex(p => p[0] === r && p[1] === c) + 1];
+              if (nextPos[0] < r) return <div className="absolute h-1/2 w-1 bottom-1/2 bg-primary pointer-events-none" />;
+              if (nextPos[0] > r) return <div className="absolute h-1/2 w-1 top-1/2 bg-primary pointer-events-none" />;
+              if (nextPos[1] < c) return <div className="absolute w-1/2 h-1 right-1/2 bg-primary pointer-events-none" />;
+              if (nextPos[1] > c) return <div className="absolute w-1/2 h-1 left-1/2 bg-primary pointer-events-none" />;
+              return null;
+            })()}
              {/* Path line from previous cell to this one */}
-             {isInPath && path.findIndex(p => p[0] === r && p[1] === c) > 0 && (
-                <div className={cn("absolute bg-primary pointer-events-none", {
-                    'h-1/2 w-1 top-0': path[path.findIndex(p => p[0] === r && p[1] === c) - 1][0] > r, // From bottom
-                    'h-1/2 w-1 bottom-0': path[path.findIndex(p => p[0] === r && p[1] === c) - 1][0] < r, // From top
-                    'w-1/2 h-1 left-0': path[path.findIndex(p => p[0] === r && p[1] === c) - 1][1] > c, // From right
-                    'w-1/2 h-1 right-0': path[path.findIndex(p => p[0] === r && p[1] === c) - 1][1] < c, // From left
-                })} />
-            )}
+             {isInPath && path.findIndex(p => p[0] === r && p[1] === c) > 0 && (() => {
+              const prevPos = path[path.findIndex(p => p[0] === r && p[1] === c) - 1];
+              if (prevPos[0] > r) return <div className="absolute h-1/2 w-1 bottom-0 bg-primary pointer-events-none" />;
+              if (prevPos[0] < r) return <div className="absolute h-1/2 w-1 top-0 bg-primary pointer-events-none" />;
+              if (prevPos[1] > c) return <div className="absolute w-1/2 h-1 right-0 bg-primary pointer-events-none" />;
+              if (prevPos[1] < c) return <div className="absolute w-1/2 h-1 left-0 bg-primary pointer-events-none" />;
+              return null;
+            })()}
 
             {/* Wall rendering */}
             {walls.map((wall, i) => {
