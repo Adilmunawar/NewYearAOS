@@ -94,6 +94,7 @@ export default function GiftBox({ onClick }: GiftBoxProps) {
             {/* Lid Top */}
             <div className="absolute w-32 h-32 bg-gradient-to-b from-primary to-yellow-600 transform -translate-y-1/2 rotate-x-90">
                 <div className="absolute top-1/2 -translate-y-1/2 left-0 w-full h-6 bg-primary/80"></div>
+                <div className="absolute left-1/2 -translate-x-1/2 top-0 w-6 h-full bg-primary/80"></div>
             </div>
             {/* Lid Front */}
             <div className="absolute w-32 h-6 bg-primary transform translate-y-[-12px] translate-z-16"></div>
