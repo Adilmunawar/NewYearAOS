@@ -87,19 +87,25 @@ export default function ZipPuzzle({ puzzleConfig, onSolve }: ZipPuzzleProps) {
   }, [puzzleConfig]);
   
   const { points: initialPoints, walls } = puzzleConfig;
+  
+  const sortedPoints = useMemo(() => [...initialPoints].sort((a, b) => a.point - b.point), [initialPoints]);
 
   const nextPointToFind = useMemo(() => {
     const pointsOnPath = path
-        .map(pos => initialPoints.find(p => p.pos[0] === pos[0] && p.pos[1] === pos[1]))
+        .map(pos => sortedPoints.find(p => p.pos[0] === pos[0] && p.pos[1] === pos[1]))
         .filter((p): p is { point: number; pos: [number, number]; } => p !== undefined);
 
-    if (pointsOnPath.length === initialPoints.length) {
-      return initialPoints.length + 1; // All points found
-    }
+    if (pointsOnPath.length === 0) return 1;
 
-    const maxPointFound = pointsOnPath.reduce((max, p) => Math.max(max, p.point), 0);
-    return maxPointFound + 1;
-  }, [path, initialPoints]);
+    // Check if the points on the path are in sequential order
+    for (let i = 0; i < pointsOnPath.length; i++) {
+      if (pointsOnPath[i].point !== i + 1) {
+        return i + 1; // The next point to find is the one that's missing
+      }
+    }
+    
+    return pointsOnPath.length + 1;
+  }, [path, sortedPoints]);
 
   const handleDragStart = (row: number, col: number) => {
     if (solved) return;
@@ -115,7 +121,13 @@ export default function ZipPuzzle({ puzzleConfig, onSolve }: ZipPuzzleProps) {
     if (isDragging) {
       setIsDragging(false);
        // Check for win condition after drag ends
-      if (nextPointToFind > initialPoints.length) {
+      const pointsOnPath = path
+        .map(pos => sortedPoints.find(p => p.pos[0] === pos[0] && p.pos[1] === pos[1]))
+        .filter((p): p is { point: number; pos: [number, number] } => p !== undefined);
+      
+      const allPointsFound = pointsOnPath.length === sortedPoints.length;
+      
+      if (allPointsFound) {
         setSolved(true);
         setTimeout(onSolve, 500);
       }
@@ -144,8 +156,12 @@ export default function ZipPuzzle({ puzzleConfig, onSolve }: ZipPuzzleProps) {
 
     // Check if moving back on the path
     if (path.length > 1 && path[path.length - 2][0] === row && path[path.length - 2][1] === col) {
-      const newPath = path.slice(0, -1);
-      setPath(newPath);
+      const pointBeingRemoved = initialPoints.find(p => p.pos[0] === lastPos[0] && p.pos[1] === lastPos[1]);
+      // Only allow backtracking if the point being removed is not a required numbered point (or it's the last one)
+      if (!pointBeingRemoved || pointBeingRemoved.point >= nextPointToFind) {
+          const newPath = path.slice(0, -1);
+          setPath(newPath);
+      }
       return;
     }
 
