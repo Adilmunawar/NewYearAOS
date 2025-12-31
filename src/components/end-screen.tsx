@@ -1,6 +1,6 @@
 'use client';
 
-import { PartyPopper, Linkedin, Code, Briefcase } from 'lucide-react';
+import { PartyPopper, Linkedin, Code, User } from 'lucide-react';
 import { Button } from './ui/button';
 
 const triggerConfettiBlast = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -64,7 +64,7 @@ export default function EndScreen({ onRestart }: EndScreenProps) {
                 </a>
                  <a href="https://adilmunawar.vercel.app/" target="_blank" rel="noopener noreferrer">
                   <Button variant="outline" className="border-primary/50 text-white hover:bg-primary/10 hover:text-primary transition-all duration-300 hover:scale-105">
-                    <Briefcase className="mr-2 h-5 w-5" /> Portfolio
+                    <User className="mr-2 h-5 w-5" /> Portfolio
                   </Button>
                 </a>
               </div>
