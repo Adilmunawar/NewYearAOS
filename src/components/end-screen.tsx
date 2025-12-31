@@ -69,14 +69,6 @@ export default function EndScreen({ onRestart }: EndScreenProps) {
                 </a>
               </div>
             </div>
-             <Button
-                onClick={onRestart}
-                variant="link"
-                className="mt-8 text-white/50 animate-fade-in-up"
-                style={{animationDelay: '1s'}}
-             >
-                Start Over
-            </Button>
         </div>
     </div>
   );
