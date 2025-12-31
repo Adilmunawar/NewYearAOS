@@ -132,6 +132,14 @@ export default {
           'from': { 'background-position': '200% 0' },
           'to': { 'background-position': '-200% 0' },
         },
+        'twinkle': {
+          '0%, 100%': { opacity: '0', transform: 'scale(0.8)' },
+          '50%': { opacity: '1', transform: 'scale(1.2)' },
+        },
+        'text-breath': {
+          '0%, 100%': { transform: 'scale(1)', textShadow: '0 0 8px hsl(var(--primary) / 0.6)' },
+          '50%': { transform: 'scale(1.03)', textShadow: '0 0 16px hsl(var(--primary) / 0.8)' },
+        }
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -146,6 +154,8 @@ export default {
         'aggressive-shake': 'aggressive-shake 0.5s ease-in-out infinite',
         'shimmer': 'shimmer 2s linear infinite',
         'flip': 'flip 0.3s ease-in-out',
+        'twinkle': 'twinkle 4s ease-in-out infinite',
+        'text-breath': 'text-breath 4s ease-in-out infinite',
       },
     },
   },
